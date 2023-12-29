@@ -1,9 +1,13 @@
-import { Request, Response } from 'express';
+import { Request, Response, Next } from 'express';
 import Student from '../models/student';
+import log4js from '../middlewares/log4js';
+import statusCodeError from '../middlewares/statusCodeError';
+
+const logger = log4js.getLogger("file");
 
 class StudentController {
 
-    async createStudent(req: Request, res: Response) {
+    async createStudent(req: Request, res: Response, next: Next) {
 
         const { firstName, lastName, course, marks } = req.body;
 
@@ -19,13 +23,13 @@ class StudentController {
             res
                 .status(201)
                 .json(savedStudent);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+            logger.info(`Student was successfully added in the DB - ${savedStudent}`);
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async updateStudent(req: Request, res: Response) {
+    async updateStudent(req: Request, res: Response, next: Next) {
         const studentId = req.params.id;
         const { firstName, lastName, course, marks } = req.body;
         try {
@@ -39,16 +43,16 @@ class StudentController {
                 res
                     .status(200)
                     .json(updatedStudent);
+                logger.info(`Student was successfully updated in the DB - ${updatedStudent}`);
             } else {
-                res.status(404).json({ message: 'Student is not found' });
+                throw new statusCodeError(404, 'Student is not found');
             }
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async deleteStudent(req: Request, res: Response) {
+    async deleteStudent(req: Request, res: Response, next: Next) {
         const studentId = req.params.id;
 
         try {
@@ -57,25 +61,26 @@ class StudentController {
             if (deletedStudent) {
                 res
                     .json(deletedStudent);
+                logger.info(`Student was successfully deleted from the DB`);
             } else {
-                res.status(404).json({ message: 'Student is not found' });
+                throw new statusCodeError(404, 'Student is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
-    async getAllStudents(req: Request, res: Response) {
+    async getAllStudents(req: Request, res: Response, next: Next) {
         try {
             const students = await Student.find();
             res
                 .status(200)
                 .json(students);
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async getStudentById(req: Request, res: Response) {
+    async getStudentById(req: Request, res: Response, next: Next) {
         const studentId = req.params.id;
 
         try {
@@ -85,10 +90,10 @@ class StudentController {
                     .status(200)
                     .json(student);
             } else {
-                res.status(404).json({ message: 'Student is not found' });
+                throw new statusCodeError(404, 'Student is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 }

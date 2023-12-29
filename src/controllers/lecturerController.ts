@@ -1,9 +1,13 @@
-import { Request, Response } from 'express';
+import { Request, Response, Next } from 'express';
 import Lecturer from '../models/lecturer';
+import log4js from '../middlewares/log4js';
+import statusCodeError from '../middlewares/statusCodeError';
+
+const logger = log4js.getLogger("file");
 
 class LecturerController {
 
-    async createLecturer(req: Request, res: Response) {
+    async createLecturer(req: Request, res: Response, next: Next) {
         const { firstName, lastName, faculty, courses, workTime } = req.body;
 
         const newLecturer = new Lecturer({
@@ -17,14 +21,15 @@ class LecturerController {
         try {
             const savedLecturer = await newLecturer.save();
             res
-            .status(201)
-            .json(savedLecturer);
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+                .status(201)
+                .json(savedLecturer);
+            logger.info(`Lecturer was successfully added in the DB - ${savedLecturer}`);
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async updateLecturer(req: Request, res: Response) {
+    async updateLecturer(req: Request, res: Response, next: Next) {
         const lecturerId = req.params.id;
         const { firstName, lastName, faculty, courses, workTime } = req.body;
 
@@ -37,17 +42,18 @@ class LecturerController {
 
             if (updatedLecturer) {
                 res
-                .status(200)
-                .json(updatedLecturer);
+                    .status(200)
+                    .json(updatedLecturer);
+                logger.info(`Lecturer was successfully updated in the DB - ${updatedLecturer}`);
             } else {
-                res.status(404).json({ message: 'Lecturer is not found' });
+                throw new statusCodeError(404, 'Lecturer is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async deleteLecturer(req: Request, res: Response) {
+    async deleteLecturer(req: Request, res: Response, next: Next) {
         const lecturerId = req.params.id;
 
         try {
@@ -55,39 +61,40 @@ class LecturerController {
 
             if (deletedLecturer) {
                 res
-                .json(deletedLecturer);
+                    .json(deletedLecturer);
+                logger.info(`Lecturer was successfully deleted from the DB`);
             } else {
-                res.status(404).json({ message: 'Lecturer is not found' });
+                throw new statusCodeError(404, 'Lecturer is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
-    async getAllLecturers(req: Request, res: Response) {
+    async getAllLecturers(req: Request, res: Response, next: Next) {
         try {
             const lecturers = await Lecturer.find();
             res
-            .status(200)
-            .json(lecturers);
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+                .status(200)
+                .json(lecturers);
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async getLecturerById(req: Request, res: Response) {
+    async getLecturerById(req: Request, res: Response, next: Next) {
         const lecturerId = req.params.id;
 
         try {
             const lecturer = await Lecturer.findById(lecturerId);
             if (lecturer) {
                 res
-                .status(200)
-                .json(lecturer);
+                    .status(200)
+                    .json(lecturer);
             } else {
-                res.status(404).json({ message: 'Lecturer is not found' });
+                throw new statusCodeError(404, 'Lecturer is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 }

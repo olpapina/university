@@ -1,9 +1,13 @@
-import { Request, Response } from 'express';
+import { Request, Response, Next } from 'express';
 import University from '../models/university';
+import log4js from '../middlewares/log4js';
+import statusCodeError from '../middlewares/statusCodeError';
+
+const logger = log4js.getLogger("file");
 
 class UniversityController {
 
-    async createUniversity(req: Request, res: Response) {
+    async createUniversity(req: Request, res: Response, next: Next) {
 
         const { title, address, faculties } = req.body;
 
@@ -16,15 +20,15 @@ class UniversityController {
         try {
             const savedUniversity = await newUniversity.save();
             res
-            .status(201)
-            .json(savedUniversity);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+                .status(201)
+                .json(savedUniversity);
+            logger.info(`University was successfully added in the DB - ${savedUniversity}`);
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async updateUniversity(req: Request, res: Response) {
+    async updateUniversity(req: Request, res: Response, next: Next) {
         const universityId = req.params.id;
         const { title, address, faculties } = req.body;
         try {
@@ -36,18 +40,18 @@ class UniversityController {
 
             if (updatedUniversity) {
                 res
-                .status(200)
-                .json(updatedUniversity);
+                    .status(200)
+                    .json(updatedUniversity);
+                logger.info(`University was successfully updated in the DB - ${updatedUniversity}`);
             } else {
-                res.status(404).json({ message: 'University is not found' });
+                throw new statusCodeError(404, 'University is not found');
             }
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async deleteUniversity(req: Request, res: Response) {
+    async deleteUniversity(req: Request, res: Response, next: Next) {
         const universityId = req.params.id;
 
         try {
@@ -55,39 +59,40 @@ class UniversityController {
 
             if (deletedUniversity) {
                 res
-                .json(deletedUniversity);
+                    .json(deletedUniversity);
+                logger.info(`University was successfully deleted from the DB`);
             } else {
-                res.status(404).json({ message: 'University is not found' });
+                throw new statusCodeError(404, 'University is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
-    async getAllUniversities(req: Request, res: Response) {
+    async getAllUniversities(req: Request, res: Response, next: Next) {
         try {
             const universities = await University.find();
             res
-            .status(200)
-            .json(universities);
+                .status(200)
+                .json(universities);
         } catch (error) {
             res.status(500).json({ message: 'Internal Server Error occurs' });
         }
     }
 
-    async getUniversityById(req: Request, res: Response) {
+    async getUniversityById(req: Request, res: Response, next: Next) {
         const universityId = req.params.id;
 
         try {
             const university = await University.findById(universityId);
             if (university) {
                 res
-                .status(200)
-                .json(university);
+                    .status(200)
+                    .json(university);
             } else {
-                res.status(404).json({ message: 'University is not found' });
+                throw new statusCodeError(404, 'University is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 }

@@ -1,9 +1,13 @@
-import { Request, Response } from 'express';
+import { Request, Response, Next } from 'express';
 import Mark from '../models/mark';
+import log4js from '../middlewares/log4js';
+import statusCodeError from '../middlewares/statusCodeError';
+
+const logger = log4js.getLogger("file");
 
 class MarkController {
 
-    async createMark(req: Request, res: Response) {
+    async createMark(req: Request, res: Response, next: Next) {
 
         const { title, magnitude } = req.body;
 
@@ -17,13 +21,13 @@ class MarkController {
             res
                 .status(201)
                 .json(savedMark);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+            logger.info(`Mark was successfully added in the DB - ${savedMark}`);
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async updateMark(req: Request, res: Response) {
+    async updateMark(req: Request, res: Response, next: Next) {
         const markId = req.params.id;
         const { title, magnitude } = req.body;
         try {
@@ -37,16 +41,16 @@ class MarkController {
                 res
                     .status(200)
                     .json(updatedMark);
+                logger.info(`Mark was successfully updated in the DB - ${updatedMark}`);
             } else {
-                res.status(404).json({ message: 'Mark is not found' });
+                throw new statusCodeError(404, 'Mark is not found');
             }
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async deleteMark(req: Request, res: Response) {
+    async deleteMark(req: Request, res: Response, next: Next) {
         const markId = req.params.id;
 
         try {
@@ -55,11 +59,12 @@ class MarkController {
             if (deletedMark) {
                 res
                     .json(deletedMark);
+                logger.info(`Mark was successfully deleted from the DB`);
             } else {
-                res.status(404).json({ message: 'Mark is not found' });
+                throw new statusCodeError(404, 'Mark is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
     async getAllMarks(req: Request, res: Response) {
@@ -73,7 +78,7 @@ class MarkController {
         }
     }
 
-    async getMarkById(req: Request, res: Response) {
+    async getMarkById(req: Request, res: Response, next: Next) {
         const markId = req.params.id;
 
         try {
@@ -83,10 +88,10 @@ class MarkController {
                     .status(200)
                     .json(mark);
             } else {
-                res.status(404).json({ message: 'Mark is not found' });
+                throw new statusCodeError(404, 'Mark is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 }

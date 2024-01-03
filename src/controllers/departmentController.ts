@@ -1,9 +1,13 @@
-import { Request, Response } from 'express';
+import { Request, Response, Next } from 'express';
 import Department from '../models/department';
+import log4js from '../middlewares/log4js';
+import statusCodeError from '../middlewares/statusCodeError';
+
+const logger = log4js.getLogger("file");
 
 class DepartmentController {
 
-    async createDepartment(req: Request, res: Response) {
+    async createDepartment(req: Request, res: Response, next: Next) {
 
         const { title, courses } = req.body;
 
@@ -17,13 +21,13 @@ class DepartmentController {
             res
                 .status(201)
                 .json(savedDepartment);
+            logger.info(`Department was successfully added in the DB - ${savedDepartment}`);
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+            return next(error);
         }
     }
 
-    async updateDepartment(req: Request, res: Response) {
+    async updateDepartment(req: Request, res: Response, next: Next) {
         const departmentId = req.params.id;
         const { title, courses } = req.body;
         try {
@@ -37,16 +41,16 @@ class DepartmentController {
                 res
                     .status(200)
                     .json(updatedDepartment);
+                logger.info(`Department was successfully updated in the DB - ${updatedDepartment}`);
             } else {
-                res.status(404).json({ message: 'Department is not found' });
+                throw new statusCodeError(404, 'Department is not found');
             }
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async deleteDepartment(req: Request, res: Response) {
+    async deleteDepartment(req: Request, res: Response, next: Next) {
         const departmentId = req.params.id;
 
         try {
@@ -55,25 +59,26 @@ class DepartmentController {
             if (deletedDepartment) {
                 res
                     .json(deletedDepartment);
+                logger.info(`Department was successfully deleted from the DB`);
             } else {
-                res.status(404).json({ message: 'Department is not found' });
+                throw new statusCodeError(404, 'Department is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
-    async getAllDepartments(req: Request, res: Response) {
+    async getAllDepartments(req: Request, res: Response, next: Next) {
         try {
             const departments = await Department.find();
             res
                 .status(200)
                 .json(departments);
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async getDepartmentById(req: Request, res: Response) {
+    async getDepartmentById(req: Request, res: Response, next: Next) {
         const departmentId = req.params.id;
 
         try {
@@ -83,10 +88,10 @@ class DepartmentController {
                     .status(200)
                     .json(department);
             } else {
-                res.status(404).json({ message: 'Department is not found' });
+                throw new statusCodeError(404, 'Department is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 }

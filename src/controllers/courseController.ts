@@ -1,9 +1,13 @@
-import { Request, Response } from 'express';
+import { Request, Response, Next } from 'express';
 import Course from '../models/course';
+import log4js from '../middlewares/log4js';
+import statusCodeError from '../middlewares/statusCodeError';
+
+const logger = log4js.getLogger("file");
 
 class CourseController {
 
-    async createCourse(req: Request, res: Response) {
+    async createCourse(req: Request, res: Response, next: Next) {
 
         const { title, subjects, yearOfStudying } = req.body;
 
@@ -16,15 +20,15 @@ class CourseController {
         try {
             const savedCourse = await newCourse.save();
             res
-            .status(201)
-            .json(savedCourse);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+                .status(201)
+                .json(savedCourse);
+            logger.info(`Course was successfully added in the DB - ${savedCourse}`);
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async updateCourse(req: Request, res: Response) {
+    async updateCourse(req: Request, res: Response, next: Next) {
         const courseId = req.params.id;
         const { title, subjects, yearOfStudying } = req.body;
         try {
@@ -36,18 +40,18 @@ class CourseController {
 
             if (updatedCourse) {
                 res
-                .status(200)
-                .json(updatedCourse);
+                    .status(200)
+                    .json(updatedCourse);
+                logger.info(`Course was successfully updated in the DB - ${updatedCourse}`);
             } else {
-                res.status(404).json({ message: 'Course is not found' });
+                throw new statusCodeError(404, 'Course is not found');
             }
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async deleteCourse(req: Request, res: Response) {
+    async deleteCourse(req: Request, res: Response, next: Next) {
         const courseId = req.params.id;
 
         try {
@@ -55,39 +59,40 @@ class CourseController {
 
             if (deletedCourse) {
                 res
-                .json(deletedCourse);
+                    .json(deletedCourse);
+                logger.info(`Course was successfully deleted from the DB`);
             } else {
-                res.status(404).json({ message: 'Course is not found' });
+                throw new statusCodeError(404, 'Course is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
-    async getAllCourses(req: Request, res: Response) {
+    async getAllCourses(req: Request, res: Response, next: Next) {
         try {
             const courses = await Course.find();
             res
-            .status(200)
-            .json(courses);
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+                .status(200)
+                .json(courses);
+        } catch (err) {
+            return next(err);
         }
     }
 
-    async getCourseById(req: Request, res: Response) {
+    async getCourseById(req: Request, res: Response, next: Next) {
         const courseId = req.params.id;
 
         try {
             const course = await Course.findById(courseId);
             if (course) {
                 res
-                .status(200)
-                .json(course);
+                    .status(200)
+                    .json(course);
             } else {
-                res.status(404).json({ message: 'Course is not found' });
+                throw new statusCodeError(404, 'Course is not found');
             }
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            return next(err);
         }
     }
 }

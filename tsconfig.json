@@ -1,9 +1,24 @@
 {
-    "compilerOptions": {
-      "target": "ES5",
-      "module": "CommonJS",
-      "outDir": "./out",
-      "rootDir": "./src",
-      "sourceMap": true
-    }
+  "compilerOptions": {
+    "lib": [
+      "es6"
+    ],
+    "target": "es6",
+    "moduleResolution": "node",
+    "module": "CommonJS",
+    "outDir": "./out",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "esModuleInterop": true,
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   }
+}

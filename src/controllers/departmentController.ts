@@ -1,4 +1,4 @@
-import { Request, Response, Next } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Department from '../models/department';
 import log4js from '../middlewares/log4js';
 import statusCodeError from '../middlewares/statusCodeError';
@@ -7,7 +7,7 @@ const logger = log4js.getLogger("file");
 
 class DepartmentController {
 
-    async createDepartment(req: Request, res: Response, next: Next) {
+    async createDepartment(req: Request, res: Response, next: NextFunction) {
 
         const { title, courses } = req.body;
 
@@ -27,7 +27,7 @@ class DepartmentController {
         }
     }
 
-    async updateDepartment(req: Request, res: Response, next: Next) {
+    async updateDepartment(req: Request, res: Response, next: NextFunction) {
         const departmentId = req.params.id;
         const { title, courses } = req.body;
         try {
@@ -50,7 +50,7 @@ class DepartmentController {
         }
     }
 
-    async deleteDepartment(req: Request, res: Response, next: Next) {
+    async deleteDepartment(req: Request, res: Response, next: NextFunction) {
         const departmentId = req.params.id;
 
         try {
@@ -67,7 +67,7 @@ class DepartmentController {
             return next(err);
         }
     }
-    async getAllDepartments(req: Request, res: Response, next: Next) {
+    async getAllDepartments(req: Request, res: Response, next: NextFunction) {
         try {
             const departments = await Department.find();
             res
@@ -78,7 +78,7 @@ class DepartmentController {
         }
     }
 
-    async getDepartmentById(req: Request, res: Response, next: Next) {
+    async getDepartmentById(req: Request, res: Response, next: NextFunction) {
         const departmentId = req.params.id;
 
         try {

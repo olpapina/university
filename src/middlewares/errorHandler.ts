@@ -1,10 +1,10 @@
-import { Request, Response, Next } from "express";
+import { Request, Response, } from "express";
 import statusCodeError from "../middlewares/statusCodeError";
 import log4js from "./log4js";
 
 class ErrorHandler {
 
-    public static errorHandler(err: Error | statusCodeError, req: Request, res: Response, next: Next) {
+    public static errorHandler(err: Error | statusCodeError, req: Request, res: Response, next: any) {
         const logger = log4js.getLogger("file");
         if (res.headersSent) {
             return next(err)

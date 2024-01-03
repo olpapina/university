@@ -1,4 +1,4 @@
-import { Request, Response, Next } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Course from '../models/course';
 import log4js from '../middlewares/log4js';
 import statusCodeError from '../middlewares/statusCodeError';
@@ -7,7 +7,8 @@ const logger = log4js.getLogger("file");
 
 class CourseController {
 
-    async createCourse(req: Request, res: Response, next: Next) {
+    async createCourse(req: Request, res: Response, next: NextFunction) {
+        console.log(req.body);
 
         const { title, subjects, yearOfStudying } = req.body;
 
@@ -28,7 +29,7 @@ class CourseController {
         }
     }
 
-    async updateCourse(req: Request, res: Response, next: Next) {
+    async updateCourse(req: Request, res: Response, next: NextFunction) {
         const courseId = req.params.id;
         const { title, subjects, yearOfStudying } = req.body;
         try {
@@ -51,7 +52,7 @@ class CourseController {
         }
     }
 
-    async deleteCourse(req: Request, res: Response, next: Next) {
+    async deleteCourse(req: Request, res: Response, next: NextFunction) {
         const courseId = req.params.id;
 
         try {
@@ -68,7 +69,7 @@ class CourseController {
             return next(err);
         }
     }
-    async getAllCourses(req: Request, res: Response, next: Next) {
+    async getAllCourses(req: Request, res: Response, next: NextFunction) {
         try {
             const courses = await Course.find();
             res
@@ -79,9 +80,9 @@ class CourseController {
         }
     }
 
-    async getCourseById(req: Request, res: Response, next: Next) {
+    async getCourseById(req: Request, res: Response, next: NextFunction) {
         const courseId = req.params.id;
-
+        logger.info(`Course was successfully got from the DB`);
         try {
             const course = await Course.findById(courseId);
             if (course) {

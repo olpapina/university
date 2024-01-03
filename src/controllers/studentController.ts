@@ -1,4 +1,4 @@
-import { Request, Response, Next } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Student from '../models/student';
 import log4js from '../middlewares/log4js';
 import statusCodeError from '../middlewares/statusCodeError';
@@ -7,7 +7,7 @@ const logger = log4js.getLogger("file");
 
 class StudentController {
 
-    async createStudent(req: Request, res: Response, next: Next) {
+    async createStudent(req: Request, res: Response, next: NextFunction) {
 
         const { firstName, lastName, course, marks } = req.body;
 
@@ -29,7 +29,7 @@ class StudentController {
         }
     }
 
-    async updateStudent(req: Request, res: Response, next: Next) {
+    async updateStudent(req: Request, res: Response, next: NextFunction) {
         const studentId = req.params.id;
         const { firstName, lastName, course, marks } = req.body;
         try {
@@ -52,7 +52,7 @@ class StudentController {
         }
     }
 
-    async deleteStudent(req: Request, res: Response, next: Next) {
+    async deleteStudent(req: Request, res: Response, next: NextFunction) {
         const studentId = req.params.id;
 
         try {
@@ -69,7 +69,7 @@ class StudentController {
             return next(err);
         }
     }
-    async getAllStudents(req: Request, res: Response, next: Next) {
+    async getAllStudents(req: Request, res: Response, next: NextFunction) {
         try {
             const students = await Student.find();
             res
@@ -80,7 +80,7 @@ class StudentController {
         }
     }
 
-    async getStudentById(req: Request, res: Response, next: Next) {
+    async getStudentById(req: Request, res: Response, next: NextFunction) {
         const studentId = req.params.id;
 
         try {

@@ -1,4 +1,4 @@
-import { Request, Response, Next } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Lecturer from '../models/lecturer';
 import log4js from '../middlewares/log4js';
 import statusCodeError from '../middlewares/statusCodeError';
@@ -7,7 +7,7 @@ const logger = log4js.getLogger("file");
 
 class LecturerController {
 
-    async createLecturer(req: Request, res: Response, next: Next) {
+    async createLecturer(req: Request, res: Response, next: NextFunction) {
         const { firstName, lastName, faculty, courses, workTime } = req.body;
 
         const newLecturer = new Lecturer({
@@ -29,7 +29,7 @@ class LecturerController {
         }
     }
 
-    async updateLecturer(req: Request, res: Response, next: Next) {
+    async updateLecturer(req: Request, res: Response, next: NextFunction) {
         const lecturerId = req.params.id;
         const { firstName, lastName, faculty, courses, workTime } = req.body;
 
@@ -53,7 +53,7 @@ class LecturerController {
         }
     }
 
-    async deleteLecturer(req: Request, res: Response, next: Next) {
+    async deleteLecturer(req: Request, res: Response, next: NextFunction) {
         const lecturerId = req.params.id;
 
         try {
@@ -70,7 +70,7 @@ class LecturerController {
             return next(err);
         }
     }
-    async getAllLecturers(req: Request, res: Response, next: Next) {
+    async getAllLecturers(req: Request, res: Response, next: NextFunction) {
         try {
             const lecturers = await Lecturer.find();
             res
@@ -81,7 +81,7 @@ class LecturerController {
         }
     }
 
-    async getLecturerById(req: Request, res: Response, next: Next) {
+    async getLecturerById(req: Request, res: Response, next: NextFunction) {
         const lecturerId = req.params.id;
 
         try {

@@ -1,4 +1,4 @@
-import { Request, Response, Next } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Mark from '../models/mark';
 import log4js from '../middlewares/log4js';
 import statusCodeError from '../middlewares/statusCodeError';
@@ -7,7 +7,7 @@ const logger = log4js.getLogger("file");
 
 class MarkController {
 
-    async createMark(req: Request, res: Response, next: Next) {
+    async createMark(req: Request, res: Response, next: NextFunction) {
 
         const { title, magnitude } = req.body;
 
@@ -27,7 +27,7 @@ class MarkController {
         }
     }
 
-    async updateMark(req: Request, res: Response, next: Next) {
+    async updateMark(req: Request, res: Response, next: NextFunction) {
         const markId = req.params.id;
         const { title, magnitude } = req.body;
         try {
@@ -50,7 +50,7 @@ class MarkController {
         }
     }
 
-    async deleteMark(req: Request, res: Response, next: Next) {
+    async deleteMark(req: Request, res: Response, next: NextFunction) {
         const markId = req.params.id;
 
         try {
@@ -78,7 +78,7 @@ class MarkController {
         }
     }
 
-    async getMarkById(req: Request, res: Response, next: Next) {
+    async getMarkById(req: Request, res: Response, next: NextFunction) {
         const markId = req.params.id;
 
         try {

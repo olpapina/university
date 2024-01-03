@@ -1,4 +1,4 @@
-import { Request, Response, Next } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import University from '../models/university';
 import log4js from '../middlewares/log4js';
 import statusCodeError from '../middlewares/statusCodeError';
@@ -7,7 +7,7 @@ const logger = log4js.getLogger("file");
 
 class UniversityController {
 
-    async createUniversity(req: Request, res: Response, next: Next) {
+    async createUniversity(req: Request, res: Response, next: NextFunction) {
 
         const { title, address, faculties } = req.body;
 
@@ -28,7 +28,7 @@ class UniversityController {
         }
     }
 
-    async updateUniversity(req: Request, res: Response, next: Next) {
+    async updateUniversity(req: Request, res: Response, next: NextFunction) {
         const universityId = req.params.id;
         const { title, address, faculties } = req.body;
         try {
@@ -51,7 +51,7 @@ class UniversityController {
         }
     }
 
-    async deleteUniversity(req: Request, res: Response, next: Next) {
+    async deleteUniversity(req: Request, res: Response, next: NextFunction) {
         const universityId = req.params.id;
 
         try {
@@ -68,7 +68,7 @@ class UniversityController {
             return next(err);
         }
     }
-    async getAllUniversities(req: Request, res: Response, next: Next) {
+    async getAllUniversities(req: Request, res: Response, next: NextFunction) {
         try {
             const universities = await University.find();
             res
@@ -79,7 +79,7 @@ class UniversityController {
         }
     }
 
-    async getUniversityById(req: Request, res: Response, next: Next) {
+    async getUniversityById(req: Request, res: Response, next: NextFunction) {
         const universityId = req.params.id;
 
         try {

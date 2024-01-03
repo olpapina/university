@@ -1,5 +1,6 @@
-const express = require('express');
-const mongoose = require('mongoose');
+// import express from "express";
+import express from "express";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 import log4js from "./middlewares/log4js";
 import courseRouter from './routes/courseRoutes';
@@ -29,17 +30,19 @@ app.use('/api/universities', universityRouter);
 
 const start = async () => {
     try {
-        await mongoose
-            .connect(`mongodb://${process.env.SERVER}/${process.env.DB_NAME}`);
-        logger.info('Connected to MongoDB');
-        app.listen(process.env.PORT, () => {
-            logger.info(`Listerning port ${process.env.PORT}`);
-        });
+        if (process.env.DB_CONN_STRING) {
+            await mongoose
+                .connect(process.env.DB_CONN_STRING), {useNewUrsParser: true, useUnifiedTopology: true};
+                logger.info('Connected to MongoDB');
+                app.listen(process.env.PORT, () => {
+                logger.info(`Listerning port ${process.env.PORT}`);
+            });
+
+            console.log('CONN_STRING: ', process.env.DB_CONN_STRING);
+        }
     } catch (error: any) {
-        logger.error('DB connection error:', error);
-    }
-    finally {
-        process.exit(1);
+        const err = error as Error;
+        console.log('ERRROR!', err.message);
     }
 }
 

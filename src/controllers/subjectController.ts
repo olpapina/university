@@ -1,4 +1,4 @@
-import { Request, Response, Next } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Subject from '../models/subject';
 import log4js from '../middlewares/log4js';
 import statusCodeError from '../middlewares/statusCodeError';
@@ -8,7 +8,7 @@ const logger = log4js.getLogger("file");
 class SubjectController {
 
 
-    async createSubject(req: Request, res: Response, next: Next) {
+    async createSubject(req: Request, res: Response, next: NextFunction) {
         const { title, quantityOfHour, lecturer } = req.body;
 
         const newSubject = new Subject({
@@ -28,7 +28,7 @@ class SubjectController {
         }
     }
 
-    async updateSubject(req: Request, res: Response, next: Next) {
+    async updateSubject(req: Request, res: Response, next: NextFunction) {
         const subjectId = req.params.id;
         const { title, quantityOfHour, lecturer } = req.body;
 
@@ -52,7 +52,7 @@ class SubjectController {
         }
     }
 
-    async deleteSubject(req: Request, res: Response, next: Next) {
+    async deleteSubject(req: Request, res: Response, next: NextFunction) {
         const subjectId = req.params.id;
 
         try {
@@ -69,7 +69,7 @@ class SubjectController {
         }
     }
 
-    async getAllSubjects(req: Request, res: Response, next: Next) {
+    async getAllSubjects(req: Request, res: Response, next: NextFunction) {
         try {
             const subjects = await Subject.find();
             res
@@ -80,7 +80,7 @@ class SubjectController {
         }
     }
 
-    async getSubjectById(req: Request, res: Response, next: Next) {
+    async getSubjectById(req: Request, res: Response, next: NextFunction) {
         const subjectId = req.params.id;
 
         try {

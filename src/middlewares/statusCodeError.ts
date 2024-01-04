@@ -1,4 +1,4 @@
-class statusCodeError extends Error {
+class StatusCodeError extends Error {
     public statusCode: number;
     public message: string;
 
@@ -9,4 +9,4 @@ class statusCodeError extends Error {
     }
 }
 
-export default statusCodeError;
+export default StatusCodeError;

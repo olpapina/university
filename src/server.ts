@@ -1,4 +1,3 @@
-// import express from "express";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -32,17 +31,15 @@ const start = async () => {
     try {
         if (process.env.DB_CONN_STRING) {
             await mongoose
-                .connect(process.env.DB_CONN_STRING), {useNewUrsParser: true, useUnifiedTopology: true};
-                logger.info('Connected to MongoDB');
-                app.listen(process.env.PORT, () => {
+                .connect(process.env.DB_CONN_STRING), { useNewUrsParser: true, useUnifiedTopology: true };
+            logger.info('Connected to MongoDB');
+            app.listen(process.env.PORT, () => {
                 logger.info(`Listerning port ${process.env.PORT}`);
             });
-
-            console.log('CONN_STRING: ', process.env.DB_CONN_STRING);
         }
-    } catch (error: any) {
-        const err = error as Error;
-        console.log('ERRROR!', err.message);
+    } catch (error) {
+        logger.error('Connection error - is not connected to the DB');
+        process.exit(1);
     }
 }
 

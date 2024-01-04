@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Mark from '../models/mark';
 import log4js from '../middlewares/log4js';
-import statusCodeError from '../middlewares/statusCodeError';
+import StatusCodeError from '../middlewares/statusCodeError';
 
 const logger = log4js.getLogger("file");
 
@@ -43,7 +43,7 @@ class MarkController {
                     .json(updatedMark);
                 logger.info(`Mark was successfully updated in the DB - ${updatedMark}`);
             } else {
-                throw new statusCodeError(404, 'Mark is not found');
+                throw new StatusCodeError(404, 'Mark is not found');
             }
         } catch (err) {
             return next(err);
@@ -61,7 +61,7 @@ class MarkController {
                     .json(deletedMark);
                 logger.info(`Mark was successfully deleted from the DB`);
             } else {
-                throw new statusCodeError(404, 'Mark is not found');
+                throw new StatusCodeError(404, 'Mark is not found');
             }
         } catch (err) {
             return next(err);
@@ -88,7 +88,7 @@ class MarkController {
                     .status(200)
                     .json(mark);
             } else {
-                throw new statusCodeError(404, 'Mark is not found');
+                throw new StatusCodeError(404, 'Mark is not found');
             }
         } catch (err) {
             return next(err);

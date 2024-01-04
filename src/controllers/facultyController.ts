@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Faculty from '../models/faculty';
 import log4js from '../middlewares/log4js';
-import statusCodeError from '../middlewares/statusCodeError';
+import StatusCodeError from '../middlewares/statusCodeError';
 
 const logger = log4js.getLogger("file");
 
@@ -44,7 +44,7 @@ class FacultyController {
                     .json(updatedFaculty);
                 logger.info(`Faculty was successfully updated in the DB - ${updatedFaculty}`);
             } else {
-                throw new statusCodeError(404, 'Faculty is not found');
+                throw new StatusCodeError(404, 'Faculty is not found');
             }
         } catch (err) {
             return next(err);
@@ -62,7 +62,7 @@ class FacultyController {
                     .json(deletedFaculty);
                 logger.info(`Faculty was successfully deleted from the DB`);
             } else {
-                throw new statusCodeError(404, 'Faculty is not found');
+                throw new StatusCodeError(404, 'Faculty is not found');
             }
         } catch (err) {
             return next(err);
@@ -89,7 +89,7 @@ class FacultyController {
                     .status(200)
                     .json(faculty);
             } else {
-                throw new statusCodeError(404, 'Faculty is not found');
+                throw new StatusCodeError(404, 'Faculty is not found');
             }
         } catch (err) {
             return next(err);

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Subject from '../models/subject';
 import log4js from '../middlewares/log4js';
-import statusCodeError from '../middlewares/statusCodeError';
+import StatusCodeError from '../middlewares/statusCodeError';
 
 const logger = log4js.getLogger("file");
 
@@ -45,7 +45,7 @@ class SubjectController {
                     .json(updatedSubject);
                 logger.info(`Subject was successfully updated in the DB - ${updatedSubject}`);
             } else {
-                throw new statusCodeError(404, 'Subject is not found');
+                throw new StatusCodeError(404, 'Subject is not found');
             }
         } catch (err) {
             return next(err);
@@ -62,7 +62,7 @@ class SubjectController {
                 res.json(deletedSubject);
                 logger.info(`Subject was successfully deleted from the DB`);
             } else {
-                throw new statusCodeError(404, 'Subject is not found');
+                throw new StatusCodeError(404, 'Subject is not found');
             }
         } catch (err) {
             return next(err);
@@ -90,7 +90,7 @@ class SubjectController {
                     .status(200)
                     .json(subject);
             } else {
-                throw new statusCodeError(404, 'Subject is not found');
+                throw new StatusCodeError(404, 'Subject is not found');
             }
         } catch (err) {
             return next(err);

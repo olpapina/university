@@ -16,6 +16,8 @@ The application also offers the option of viewing data of one of the universitie
 +  `typescript` - a strongly typed programming language that builds on JavaScript. It allows to define variable types.
 +  `body-parser` - used to process data sent in an HTTP request body.
 +  `log4js` - a very small but usefull JavaScript library to log events in your scripts.
++ `@types/express` - provides type definitions for express.
++ `@types/log4js` - provides type definitions for log4js.
 
 ## Getting Started
 
@@ -455,3 +457,40 @@ This endpoint allows to view all faculties.
 #### Response Body:
 
 JSON array containing all faculties
+
+## Lecturers
+
+### Add Lecturer
+
+#### Description:
+
+This endpoint allows to add new lecturer to the university.
+
+#### Endpoint: http://localhost:3000/api/lecturers
+
+#### Method: POST
+
+#### Request Body:
+
+{
+    "firstName": "Name",
+    "lastName": "SurName",
+    "faculty": {
+    "title": "Name Faculty",
+    "departments": [],
+    "lecturers": [],
+    "_id": "65980e93ce88586920278009",
+    "__v": 0
+}
+}
+
+#### Response Body:
+
+{
+    "firstName": "Name",
+    "lastName": "SurName",
+    "faculty": "65980e93ce88586920278009",
+    "courses": [],
+    "_id": "65980eb2ce8858692027800b",
+    "__v": 0
+}

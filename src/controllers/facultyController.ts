@@ -24,7 +24,10 @@ class FacultyController {
                 .json(savedFaculty);
             logger.info(`Faculty was successfully added in the DB - ${savedFaculty}`);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -47,7 +50,10 @@ class FacultyController {
                 throw new StatusCodeError(404, 'Faculty is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -65,9 +71,13 @@ class FacultyController {
                 throw new StatusCodeError(404, 'Faculty is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
+
     async getAllFaculty(req: Request, res: Response, next: NextFunction) {
         try {
             const faculties = await Faculty.find();
@@ -75,7 +85,10 @@ class FacultyController {
                 .status(200)
                 .json(faculties);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -92,7 +105,10 @@ class FacultyController {
                 throw new StatusCodeError(404, 'Faculty is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 }

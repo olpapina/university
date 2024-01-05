@@ -24,7 +24,10 @@ class UniversityController {
                 .json(savedUniversity);
             logger.info(`University was successfully added in the DB - ${savedUniversity}`);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -47,7 +50,10 @@ class UniversityController {
                 throw new StatusCodeError(404, 'University is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -65,17 +71,24 @@ class UniversityController {
                 throw new StatusCodeError(404, 'University is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
+
     async getAllUniversities(req: Request, res: Response, next: NextFunction) {
         try {
             const universities = await University.find();
             res
                 .status(200)
                 .json(universities);
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -92,7 +105,10 @@ class UniversityController {
                 throw new StatusCodeError(404, 'University is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 }

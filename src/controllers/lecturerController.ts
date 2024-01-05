@@ -25,7 +25,10 @@ class LecturerController {
                 .json(savedLecturer);
             logger.info(`Lecturer was successfully added in the DB - ${savedLecturer}`);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -49,7 +52,10 @@ class LecturerController {
                 throw new StatusCodeError(404, 'Lecturer is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -67,9 +73,13 @@ class LecturerController {
                 throw new StatusCodeError(404, 'Lecturer is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
+
     async getAllLecturers(req: Request, res: Response, next: NextFunction) {
         try {
             const lecturers = await Lecturer.find();
@@ -94,7 +104,10 @@ class LecturerController {
                 throw new StatusCodeError(404, 'Lecturer is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 }

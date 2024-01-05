@@ -22,8 +22,11 @@ class DepartmentController {
                 .status(201)
                 .json(savedDepartment);
             logger.info(`Department was successfully added in the DB - ${savedDepartment}`);
-        } catch (error) {
-            return next(error);
+        } catch (err) {
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -46,7 +49,10 @@ class DepartmentController {
                 throw new StatusCodeError(404, 'Department is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -64,9 +70,13 @@ class DepartmentController {
                 throw new StatusCodeError(404, 'Department is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
+
     async getAllDepartments(req: Request, res: Response, next: NextFunction) {
         try {
             const departments = await Department.find();
@@ -74,7 +84,10 @@ class DepartmentController {
                 .status(200)
                 .json(departments);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -91,7 +104,10 @@ class DepartmentController {
                 throw new StatusCodeError(404, 'Department is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 }

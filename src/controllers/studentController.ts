@@ -25,7 +25,10 @@ class StudentController {
                 .json(savedStudent);
             logger.info(`Student was successfully added in the DB - ${savedStudent}`);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -48,7 +51,10 @@ class StudentController {
                 throw new StatusCodeError(404, 'Student is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -66,9 +72,13 @@ class StudentController {
                 throw new StatusCodeError(404, 'Student is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
+
     async getAllStudents(req: Request, res: Response, next: NextFunction) {
         try {
             const students = await Student.find();
@@ -76,7 +86,10 @@ class StudentController {
                 .status(200)
                 .json(students);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -93,7 +106,10 @@ class StudentController {
                 throw new StatusCodeError(404, 'Student is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 }

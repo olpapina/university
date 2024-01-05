@@ -23,7 +23,10 @@ class MarkController {
                 .json(savedMark);
             logger.info(`Mark was successfully added in the DB - ${savedMark}`);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -46,7 +49,10 @@ class MarkController {
                 throw new StatusCodeError(404, 'Mark is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -64,17 +70,24 @@ class MarkController {
                 throw new StatusCodeError(404, 'Mark is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
-    async getAllMarks(req: Request, res: Response) {
+
+    async getAllMarks(req: Request, res: Response, next: NextFunction) {
         try {
             const marks = await Mark.find();
             res
                 .status(200)
                 .json(marks);
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -91,7 +104,10 @@ class MarkController {
                 throw new StatusCodeError(404, 'Mark is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 }

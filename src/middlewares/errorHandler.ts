@@ -4,7 +4,7 @@ import log4js from "./log4js";
 
 class ErrorHandler {
 
-    public static errorHandler(err: StatusCodeError | Error, req: Request, res: Response, next: NextFunction) {
+    public static errorHandler(err: Error | StatusCodeError, req: Request, res: Response, next: NextFunction) {
         const logger = log4js.getLogger("file");
         if (res.headersSent) {
             return next(err)

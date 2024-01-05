@@ -24,7 +24,10 @@ class SubjectController {
                 .json(savedSubject);
             logger.info(`Subject was successfully added in the DB - ${savedSubject}`);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -48,7 +51,10 @@ class SubjectController {
                 throw new StatusCodeError(404, 'Subject is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -65,7 +71,10 @@ class SubjectController {
                 throw new StatusCodeError(404, 'Subject is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -76,7 +85,10 @@ class SubjectController {
                 .status(200)
                 .json(subjects);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
@@ -93,7 +105,10 @@ class SubjectController {
                 throw new StatusCodeError(404, 'Subject is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 }

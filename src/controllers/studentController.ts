@@ -1,13 +1,14 @@
-import { Request, Response, Next } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Student from '../models/student';
 import log4js from '../middlewares/log4js';
-import statusCodeError from '../middlewares/statusCodeError';
+import StatusCodeError from '../middlewares/statusCodeError';
+import Mark from 'src/models/mark';
 
 const logger = log4js.getLogger("file");
 
 class StudentController {
 
-    async createStudent(req: Request, res: Response, next: Next) {
+    async createStudent(req: Request, res: Response, next: NextFunction) {
 
         const { firstName, lastName, course, marks } = req.body;
 
@@ -25,11 +26,14 @@ class StudentController {
                 .json(savedStudent);
             logger.info(`Student was successfully added in the DB - ${savedStudent}`);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
-    async updateStudent(req: Request, res: Response, next: Next) {
+    async updateStudent(req: Request, res: Response, next: NextFunction) {
         const studentId = req.params.id;
         const { firstName, lastName, course, marks } = req.body;
         try {
@@ -45,14 +49,17 @@ class StudentController {
                     .json(updatedStudent);
                 logger.info(`Student was successfully updated in the DB - ${updatedStudent}`);
             } else {
-                throw new statusCodeError(404, 'Student is not found');
+                throw new StatusCodeError(404, 'Student is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
-    async deleteStudent(req: Request, res: Response, next: Next) {
+    async deleteStudent(req: Request, res: Response, next: NextFunction) {
         const studentId = req.params.id;
 
         try {
@@ -63,24 +70,31 @@ class StudentController {
                     .json(deletedStudent);
                 logger.info(`Student was successfully deleted from the DB`);
             } else {
-                throw new statusCodeError(404, 'Student is not found');
+                throw new StatusCodeError(404, 'Student is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
-    async getAllStudents(req: Request, res: Response, next: Next) {
+
+    async getAllStudents(req: Request, res: Response, next: NextFunction) {
         try {
             const students = await Student.find();
             res
                 .status(200)
                 .json(students);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
-    async getStudentById(req: Request, res: Response, next: Next) {
+    async getStudentById(req: Request, res: Response, next: NextFunction) {
         const studentId = req.params.id;
 
         try {
@@ -90,10 +104,61 @@ class StudentController {
                     .status(200)
                     .json(student);
             } else {
-                throw new statusCodeError(404, 'Student is not found');
+                throw new StatusCodeError(404, 'Student is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
+        }
+    }
+
+    async getMarksOfStudent(req: Request, res: Response, next: NextFunction) {
+        const studentId = req.params.id;
+        try {
+            const student = await Student.findById(studentId).select('_id, marks').exec();
+            if (student) {
+                res
+                    .status(200)
+                    .json(student);
+            } else {
+                throw new StatusCodeError(404, 'Student is not found');
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
+        }
+    }
+
+    async getStudentsOfCourseWithMark(req: Request, res: Response, next: NextFunction) {
+        const courseTitle = req.params.title;
+        const magnitude = req.params.magnitude;
+        const { courseName, markOne } = req.query;
+        const filter: any = {};
+        if (courseName) {
+            filter.course.title = courseTitle;
+        }
+        if (markOne) {
+            filter.mark.magnitude = parseInt(magnitude);
+        }
+
+        try {
+            const filteredStudents = await Student.find(filter);
+            if (filteredStudents) {
+                res
+                    .status(200)
+                    .json(filteredStudents);
+            } else {
+                throw new StatusCodeError(404, 'Students are not found');
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 }

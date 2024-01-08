@@ -2,11 +2,10 @@
   "name": "university",
   "version": "1.0.0",
   "description": "University project for working with Mongodb and Express",
-  "type": "module",
-  "main": "index.js",
+  "main": "out/server.js",
   "scripts": {
-    "dev": "nodemon src/server.ts",
-    "start": "tsc && node src/server.ts"
+    "dev": "nodemon --watch 'src/**' --ext 'ts,json' --exec ts-node ./src/server.ts",
+    "start": "tsc && node out/server.js"
   },
   "author": "opapina",
   "license": "ISC",
@@ -15,11 +14,14 @@
     "url": "git@github.com:olpapina/university.git"
   },
   "devDependencies": {
-    "@types/node": "^20.10.5",
+    "@types/node": "^20.10.6",
     "nodemon": "^3.0.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/log4js": "^2.3.5",
+    "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "log4js": "^6.9.1",

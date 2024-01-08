@@ -21,6 +21,6 @@ const universitySchema = new Schema<IUniversity>({
     }]
 });
 
-const University = mongoose.model<IUniversity>('Student', universitySchema);
+const University = mongoose.model<IUniversity>('University', universitySchema);
 
 export default University;

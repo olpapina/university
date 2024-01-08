@@ -9,11 +9,11 @@ class SubjectController {
 
 
     async createSubject(req: Request, res: Response, next: NextFunction) {
-        const { title, quantityOfHour, lecturer } = req.body;
+        const { title, quantityOfHours, lecturer } = req.body;
 
         const newSubject = new Subject({
             title,
-            quantityOfHour,
+            quantityOfHours,
             lecturer
         });
 
@@ -33,12 +33,12 @@ class SubjectController {
 
     async updateSubject(req: Request, res: Response, next: NextFunction) {
         const subjectId = req.params.id;
-        const { title, quantityOfHour, lecturer } = req.body;
+        const { title, quantityOfHours, lecturer } = req.body;
 
         try {
             const updatedSubject = await Subject.findByIdAndUpdate(
                 subjectId,
-                { title, quantityOfHour, lecturer },
+                { title, quantityOfHours, lecturer },
                 { new: true }
             );
 

@@ -460,7 +460,7 @@ JSON array containing all faculties
 
 ## Lecturers
 
-### Add Lecturer
+### Add lecturer
 
 #### Description:
 
@@ -481,7 +481,7 @@ This endpoint allows to add new lecturer to the university.
     "lecturers": [],
     "_id": "65980e93ce88586920278009",
     "__v": 0
-}
+    }
 }
 
 #### Response Body:
@@ -494,3 +494,503 @@ This endpoint allows to add new lecturer to the university.
     "_id": "65980eb2ce8858692027800b",
     "__v": 0
 }
+
+
+### Edit lecturer
+
+#### Description:
+
+This endpoint allows to edit lecturer by ID.
+
+#### Endpoint: http://localhost:3000/api/lecturers/:id
+
+#### Method: PUT
+
+#### Request Body:
+
+{
+    "firstName": "Fill - change courses",
+    "lastName": "Fullfill",
+    "faculty": "65980e93ce88586920278009",
+    "courses": [
+        "65957bf199bd80784e42803a",
+        "6595837299bd80784e428048"
+    ]
+}
+
+#### Response Body:
+
+{
+    "_id": "659bba03e4df293c8e60877d",
+    "firstName": "Fill - change courses",
+    "lastName": "Fullfill",
+    "faculty": "65980e93ce88586920278009",
+    "courses": [
+        "65957bf199bd80784e42803a",
+        "6595837299bd80784e428048"
+    ],
+    "__v": 0
+}
+
+### Delete lecturer
+
+#### Description:
+
+This endpoint allows to delete lecturer by ID.
+
+#### Endpoint: http://localhost:3000/api/lecturers/:id
+#### Method: DELETE
+#### Parameter: id
+#### Response Body:
+
+{
+    "_id": "65980fa1ce8858692027800d",
+    "firstName": "Other person name",
+    "lastName": "Other SurName",
+    "faculty": "65980e93ce88586920278009",
+    "courses": [],
+    "__v": 0
+}
+
+### Search lecturer
+
+#### Description:
+
+This endpoint allows to search by lecturer id
+
+#### Endpoint: http://localhost:3000/api/lecturers/:id
+#### Method: GET
+#### Parameter: id
+#### Response Body:
+
+{
+    "_id": "659bba03e4df293c8e60877d",
+    "firstName": "Fill - change courses",
+    "lastName": "Fullfill",
+    "faculty": "65980e93ce88586920278009",
+    "courses": [
+        "65957bf199bd80784e42803a",
+        "6595837299bd80784e428048"
+    ],
+    "__v": 0
+}
+
+### Get all lecturers
+
+#### Description:
+
+This endpoint allows to view all lecturers.
+
+#### Endpoint: http://localhost:3000/api/lecturers
+
+#### Method: GET
+
+#### Response Body:
+
+JSON array containing all lecturers
+
+## Students
+
+### Add student
+
+#### Description:
+
+This endpoint allows to add new student to the university.
+
+#### Endpoint: http://localhost:3000/api/students
+
+#### Method: POST
+
+#### Request Body:
+
+{
+    "firstName": "Ivan",
+    "lastName": "Ivanov",
+    "course": "659585b699bd80784e42804e",
+    "marks": [ "65958a0e99bd80784e428058",
+               "65958a0e99bd80784e428058",
+               "659589d199bd80784e428056",
+               "659589d199bd80784e428056"
+    ]
+}
+
+#### Response Body:
+
+{
+    "firstName": "Ivan",
+    "lastName": "Ivanov",
+    "course": "659585b699bd80784e42804e",
+    "marks": [
+        "65958a0e99bd80784e428058",
+        "65958a0e99bd80784e428058",
+        "659589d199bd80784e428056",
+        "659589d199bd80784e428056"
+    ],
+    "_id": "659bbffde4df293c8e608783",
+    "__v": 0
+}
+
+
+### Edit student
+
+#### Description:
+
+This endpoint allows to edit student by ID.
+
+#### Endpoint: http://localhost:3000/api/students/:id
+
+#### Method: PUT
+
+#### Request Body:
+
+{
+    "firstName": "Nadya",
+    "lastName": "Ivanova",
+    "course": "659585b699bd80784e42804e",
+    "marks": [ "659589d199bd80784e428056",
+               "659589d199bd80784e428056",
+               "659589d199bd80784e428056",
+               "659589d199bd80784e428056"
+    ]
+}
+
+#### Response Body:
+
+{
+    "_id": "659bc0f7e4df293c8e608785",
+    "firstName": "Nadya",
+    "lastName": "Ivanova",
+    "course": "659585b699bd80784e42804e",
+    "marks": [
+        "659589d199bd80784e428056",
+        "659589d199bd80784e428056",
+        "659589d199bd80784e428056",
+        "659589d199bd80784e428056"
+    ],
+    "__v": 0
+}
+
+### Delete student
+
+#### Description:
+
+This endpoint allows to delete student by ID.
+
+#### Endpoint: http://localhost:3000/api/students/:id
+#### Method: DELETE
+#### Parameter: id
+#### Response Body:
+
+{
+    "_id": "659bc22de4df293c8e608788",
+    "firstName": "Olya",
+    "lastName": "Olina",
+    "course": "659585b699bd80784e42804e",
+    "marks": [
+        "659589d199bd80784e428056",
+        "659589d199bd80784e428056"
+    ],
+    "__v": 0
+}
+
+### Search student
+
+#### Description:
+
+This endpoint allows to search by student id
+
+#### Endpoint: http://localhost:3000/api/students/:id
+#### Method: GET
+#### Parameter: id
+#### Response Body:
+
+{
+    "_id": "659bc0f7e4df293c8e608785",
+    "firstName": "Nadya",
+    "lastName": "Ivanova",
+    "course": "659585b699bd80784e42804e",
+    "marks": [
+        "659589d199bd80784e428056",
+        "659589d199bd80784e428056",
+        "659589d199bd80784e428056",
+        "659589d199bd80784e428056"
+    ],
+    "__v": 0
+}
+
+### Get all students
+
+#### Description:
+
+This endpoint allows to view all students.
+
+#### Endpoint: http://localhost:3000/api/students
+
+#### Method: GET
+
+#### Response Body:
+
+JSON array containing all students
+
+### Search student's marks
+
+#### Description:
+
+This endpoint allows to search all marks of particular student
+
+#### Endpoint: http://localhost:3000/api/students/:id/marks
+#### Method: GET
+#### Parameter: id
+#### Response Body:
+
+{
+    "_id": "659c43ebe4d947b6be40e22a",
+    "marks": [
+        "659589d199bd80784e428056",
+        "659589d199bd80784e428056"
+    ]
+}
+
+
+### Find student of particular course with particular mark
+
+#### Description:
+
+This endpoint allows to search a student of particular course with particular mark
+
+#### Endpoint: http://localhost:3000/api/students?course=:title&mark=:magnitude
+#### Method: GET
+#### Parameter: title, magnitude
+#### Response Body:
+
+{
+        "_id": "659c43fce4d947b6be40e22e",
+        "firstName": "Luka",
+        "lastName": "Olin",
+        "course": "659c48015580e6dd171657e6",
+        "marks": [
+            "659c47425580e6dd171657e0",
+            "659c47425580e6dd171657e0"
+        ],
+        "__v": 0
+    }
+
+## Subjects
+
+### Add subject
+
+#### Description:
+
+This endpoint allows to add new subject to the DB.
+
+#### Endpoint: http://localhost:3000/api/subjects
+
+#### Method: POST
+
+#### Request Body:
+
+{
+    "title": "Physics",
+    "quantityOfHours": 32,
+    "lecturer": "65980eb2ce8858692027800b"
+}
+
+#### Response Body:
+
+{
+    "title": "Physics",
+    "quantityOfHours": 32,
+    "lecturer": "65980eb2ce8858692027800b",
+    "_id": "659bcb0a8a11b79b51437ac0",
+    "__v": 0
+}
+
+### Edit subject
+
+#### Description:
+
+This endpoint allows to edit subject by ID.
+
+#### Endpoint: http://localhost:3000/api/subjects/:id
+
+#### Method: PUT
+
+#### Request Body:
+
+{
+    "title": "Physics",
+    "quantityOfHours": 72,
+    "lecturer": "65980eb2ce8858692027800b"
+}
+
+#### Response Body:
+
+{
+    "_id": "659bcb0a8a11b79b51437ac0",
+    "title": "Physics",
+    "quantityOfHours": 72,
+    "lecturer": "65980eb2ce8858692027800b",
+    "__v": 0
+}
+
+### Delete subject
+
+#### Description:
+
+This endpoint allows to delete subject by ID.
+
+#### Endpoint: http://localhost:3000/api/subjects/:id
+#### Method: DELETE
+#### Parameter: id
+#### Response Body:
+
+{
+    "_id": "659bcb0a8a11b79b51437ac0",
+    "title": "Physics",
+    "quantityOfHours": 72,
+    "lecturer": "65980eb2ce8858692027800b",
+    "__v": 0
+}
+
+### Search subject
+
+#### Description:
+
+This endpoint allows to search by subject id
+
+#### Endpoint: http://localhost:3000/api/subjects/:id
+#### Method: GET
+#### Parameter: id
+#### Response Body:
+
+{
+    "_id": "659bcbb78a11b79b51437ac2",
+    "title": "Math",
+    "quantityOfHours": 52,
+    "lecturer": "65980eb2ce8858692027800b",
+    "__v": 0
+}
+
+### Get all subjects
+
+#### Description:
+
+This endpoint allows to view all subjects.
+
+#### Endpoint: http://localhost:3000/api/subjects
+
+#### Method: GET
+
+#### Response Body:
+
+JSON array containing all subjects
+
+## Universities
+
+### Add university
+
+#### Description:
+
+This endpoint allows to add new university to the DB.
+
+#### Endpoint: http://localhost:3000/api/universities
+
+#### Method: POST
+
+#### Request Body:
+
+{
+    "title": "BSUIR",
+    "address": "Brovki, 6",
+    "faculties": [ ]
+}
+
+#### Response Body:
+
+{
+    "title": "BSUIR",
+    "address": "Brovki, 6",
+    "faculties": [],
+    "_id": "659bd1628a11b79b51437ad0",
+    "__v": 0
+}
+
+### Edit university
+
+#### Description:
+
+This endpoint allows to edit university by ID.
+
+#### Endpoint: http://localhost:3000/api/universities/:id
+
+#### Method: PUT
+
+#### Request Body:
+
+{
+    "title": "BNTU- changed",
+    "address": "Independent str., 88",
+    "faculties": [ ]
+}
+
+#### Response Body:
+
+{
+    "_id": "659bdad18a11b79b51437ad4",
+    "title": "BNTU- changed",
+    "address": "Independent str., 88",
+    "faculties": [],
+    "__v": 0
+}
+
+### Delete university
+
+#### Description:
+
+This endpoint allows to delete university by ID.
+
+#### Endpoint: http://localhost:3000/api/universities/:id
+#### Method: DELETE
+#### Parameter: id
+#### Response Body:
+
+{
+    "_id": "659bdad18a11b79b51437ad4",
+    "title": "BNTU- changed",
+    "address": "Independent str., 88",
+    "faculties": [],
+    "__v": 0
+}
+
+### Search university
+
+#### Description:
+
+This endpoint allows to search by university id
+
+#### Endpoint: http://localhost:3000/api/universities/:id
+#### Method: GET
+#### Parameter: id
+#### Response Body:
+
+{
+    "_id": "659bd1ac8a11b79b51437ad2",
+    "title": "BSU",
+    "address": "Kirova, 6",
+    "faculties": [],
+    "__v": 0
+}
+
+### Get all universities
+
+#### Description:
+
+This endpoint allows to view all universities.
+
+#### Endpoint: http://localhost:3000/api/universities
+
+#### Method: GET
+
+#### Response Body:
+
+JSON array containing all universities

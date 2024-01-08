@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import Student from '../models/student';
 import log4js from '../middlewares/log4js';
 import StatusCodeError from '../middlewares/statusCodeError';
+import Mark from 'src/models/mark';
 
 const logger = log4js.getLogger("file");
 
@@ -104,6 +105,54 @@ class StudentController {
                     .json(student);
             } else {
                 throw new StatusCodeError(404, 'Student is not found');
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
+        }
+    }
+
+    async getMarksOfStudent(req: Request, res: Response, next: NextFunction) {
+        const studentId = req.params.id;
+        try {
+            const student = await Student.findById(studentId).select('_id, marks').exec();
+            if (student) {
+                res
+                    .status(200)
+                    .json(student);
+            } else {
+                throw new StatusCodeError(404, 'Student is not found');
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
+        }
+    }
+
+    async getStudentsOfCourseWithMark(req: Request, res: Response, next: NextFunction) {
+        const courseTitle = req.params.title;
+        const magnitude = req.params.magnitude;
+        const { courseName, markOne } = req.query;
+        const filter: any = {};
+        if (courseName) {
+            filter.course.title = courseTitle;
+        }
+        if (markOne) {
+            filter.mark.magnitude = parseInt(magnitude);
+        }
+
+        try {
+            const filteredStudents = await Student.find(filter);
+            if (filteredStudents) {
+                res
+                    .status(200)
+                    .json(filteredStudents);
+            } else {
+                throw new StatusCodeError(404, 'Students are not found');
             }
         } catch (err) {
             if (err instanceof Error) {

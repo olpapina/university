@@ -42,7 +42,6 @@ const start = async () => {
     } catch (error) {
         logger.error('Connection error - is not connected to the DB');
     }
-    // process.exit(1);
 }
 
 start();

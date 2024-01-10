@@ -2,14 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import Student from '../models/student';
 import log4js from '../middlewares/log4js';
 import StatusCodeError from '../middlewares/statusCodeError';
-import Mark from 'src/models/mark';
 
 const logger = log4js.getLogger("file");
 
 class StudentController {
 
     async createStudent(req: Request, res: Response, next: NextFunction) {
-
         const { firstName, lastName, course, marks } = req.body;
 
         const newStudent = new Student({
@@ -61,7 +59,6 @@ class StudentController {
 
     async deleteStudent(req: Request, res: Response, next: NextFunction) {
         const studentId = req.params.id;
-
         try {
             const deletedStudent = await Student.findByIdAndDelete(studentId);
 
@@ -81,22 +78,53 @@ class StudentController {
     }
 
     async getAllStudents(req: Request, res: Response, next: NextFunction) {
-        try {
-            const students = await Student.find();
-            res
-                .status(200)
-                .json(students);
-        } catch (err) {
-            if (err instanceof Error) {
-                logger.error(err.message)
-                return next(err);
+        const courseTitle = req.query.course as string;
+        const markMagnitude = req.query.mark as string;
+        logger.info(courseTitle, markMagnitude);
+        if (courseTitle == undefined && markMagnitude == undefined) {
+            try {
+                const students = await Student.find();
+                res
+                    .status(200)
+                    .json(students);
+            } catch (err) {
+                if (err instanceof Error) {
+                    logger.error(err.message)
+                    return next(err);
+                }
+            }
+        } else {
+            try {
+                const students = await Student.find()
+                    .populate({ path: 'course', match: { title: courseTitle.toLowerCase() } })
+                    .populate({ path: 'marks' }).exec();
+                const filteredStudents = students.reduce((filteredStudents, student) => {
+                    // @ts-ignore
+                    if (student.course && student.marks.some((mark) => mark.magnitude === parseInt(markMagnitude))) {
+                        filteredStudents.push(student);
+                    }
+                    return filteredStudents;
+                }, [] as typeof students)
+
+                if (filteredStudents) {
+                    res
+                        .status(200)
+                        .json(filteredStudents);
+
+                } else {
+                    throw new StatusCodeError(404, 'Students are not found');
+                }
+            } catch (err) {
+                if (err instanceof Error) {
+                    logger.error(err.message)
+                    return next(err);
+                }
             }
         }
     }
 
     async getStudentById(req: Request, res: Response, next: NextFunction) {
         const studentId = req.params.id;
-
         try {
             const student = await Student.findById(studentId);
             if (student) {
@@ -124,35 +152,6 @@ class StudentController {
                     .json(student);
             } else {
                 throw new StatusCodeError(404, 'Student is not found');
-            }
-        } catch (err) {
-            if (err instanceof Error) {
-                logger.error(err.message)
-                return next(err);
-            }
-        }
-    }
-
-    async getStudentsOfCourseWithMark(req: Request, res: Response, next: NextFunction) {
-        const courseTitle = req.params.title;
-        const magnitude = req.params.magnitude;
-        const { courseName, markOne } = req.query;
-        const filter: any = {};
-        if (courseName) {
-            filter.course.title = courseTitle;
-        }
-        if (markOne) {
-            filter.mark.magnitude = parseInt(magnitude);
-        }
-
-        try {
-            const filteredStudents = await Student.find(filter);
-            if (filteredStudents) {
-                res
-                    .status(200)
-                    .json(filteredStudents);
-            } else {
-                throw new StatusCodeError(404, 'Students are not found');
             }
         } catch (err) {
             if (err instanceof Error) {

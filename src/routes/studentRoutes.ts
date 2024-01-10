@@ -9,6 +9,6 @@ router.delete('/:id', StudentController.deleteStudent);
 router.get('/', StudentController.getAllStudents);
 router.get('/:id', StudentController.getStudentById);
 router.get('/:id/marks', StudentController.getMarksOfStudent);
-router.get('/?course=:title&mark=:magnitude', StudentController.getStudentsOfCourseWithMark);
+router.get('/?course=:courseTitle&mark=:magnitude', StudentController.getAllStudents);
 
 export default router;

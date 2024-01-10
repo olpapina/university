@@ -758,7 +758,7 @@ This endpoint allows to search all marks of particular student
 
 This endpoint allows to search a student of particular course with particular mark
 
-#### Endpoint: http://localhost:3000/api/students?course=:title&mark=:magnitude
+#### Endpoint: http://localhost:3000/api/students?course=technology&mark=5
 #### Method: GET
 #### Parameter: title, magnitude
 #### Response Body:

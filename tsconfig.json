@@ -1,24 +1,14 @@
 {
   "compilerOptions": {
-    "lib": [
-      "es6"
-    ],
-    "target": "es6",
-    "moduleResolution": "node",
-    "module": "CommonJS",
-    "outDir": "./out",
-    "rootDir": "./src",
-    "sourceMap": true,
-    "esModuleInterop": true,
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
+    "target": "es2016",                                 
+    "module": "NodeNext",                                
+    "rootDir": "./src",                                 
+    "moduleResolution": "NodeNext",                     
+    "baseUrl": "./",                                        
+    "outDir": "./out",             
+    "esModuleInterop": true,   
+    "forceConsistentCasingInFileNames": true,   
+    "strict": true, 
+    "skipLibCheck": true                                
   }
 }

@@ -1,13 +1,13 @@
-import { Request, Response, Next } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import University from '../models/university';
 import log4js from '../middlewares/log4js';
-import statusCodeError from '../middlewares/statusCodeError';
+import StatusCodeError from '../middlewares/statusCodeError';
 
 const logger = log4js.getLogger("file");
 
 class UniversityController {
 
-    async createUniversity(req: Request, res: Response, next: Next) {
+    async createUniversity(req: Request, res: Response, next: NextFunction) {
 
         const { title, address, faculties } = req.body;
 
@@ -24,11 +24,14 @@ class UniversityController {
                 .json(savedUniversity);
             logger.info(`University was successfully added in the DB - ${savedUniversity}`);
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
-    async updateUniversity(req: Request, res: Response, next: Next) {
+    async updateUniversity(req: Request, res: Response, next: NextFunction) {
         const universityId = req.params.id;
         const { title, address, faculties } = req.body;
         try {
@@ -44,14 +47,17 @@ class UniversityController {
                     .json(updatedUniversity);
                 logger.info(`University was successfully updated in the DB - ${updatedUniversity}`);
             } else {
-                throw new statusCodeError(404, 'University is not found');
+                throw new StatusCodeError(404, 'University is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
-    async deleteUniversity(req: Request, res: Response, next: Next) {
+    async deleteUniversity(req: Request, res: Response, next: NextFunction) {
         const universityId = req.params.id;
 
         try {
@@ -62,24 +68,31 @@ class UniversityController {
                     .json(deletedUniversity);
                 logger.info(`University was successfully deleted from the DB`);
             } else {
-                throw new statusCodeError(404, 'University is not found');
+                throw new StatusCodeError(404, 'University is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
-    async getAllUniversities(req: Request, res: Response, next: Next) {
+
+    async getAllUniversities(req: Request, res: Response, next: NextFunction) {
         try {
             const universities = await University.find();
             res
                 .status(200)
                 .json(universities);
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error occurs' });
+        } catch (err) {
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 
-    async getUniversityById(req: Request, res: Response, next: Next) {
+    async getUniversityById(req: Request, res: Response, next: NextFunction) {
         const universityId = req.params.id;
 
         try {
@@ -89,10 +102,13 @@ class UniversityController {
                     .status(200)
                     .json(university);
             } else {
-                throw new statusCodeError(404, 'University is not found');
+                throw new StatusCodeError(404, 'University is not found');
             }
         } catch (err) {
-            return next(err);
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
         }
     }
 }

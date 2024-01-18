@@ -13,6 +13,7 @@ import studentRouter from './routes/studentRoutes';
 import universityRouter from './routes/universityRoutes';
 import { engine } from 'express-handlebars';
 import * as path from "path";
+import ErrorHandler from "./middlewares/errorHandler";
 
 const logger = log4js.getLogger("file");
 dotenv.config();
@@ -32,9 +33,22 @@ app.use('/api/faculties', facultyRouter);
 app.use('/api/marks', markRouter);
 app.use('/api/students', studentRouter);
 app.use('/api/universities', universityRouter);
+app.use(ErrorHandler.errorHandler);
 
-app.get('/', (req, res) => {
-    res.render('home');
+app.get('/home', (req, res) => {
+    res.render('home', { pageTitle: 'Home' });
+});
+
+app.get('/faculties', (req, res) => {
+    res.render('faculties', { pageTitle: 'Faculties' });
+});
+
+app.get('/departments', (req, res) => {
+    res.render('departments', { pageTitle: 'Departments' });
+});
+
+app.get('/students', (req, res) => {
+    res.render('students', { pageTitle: 'Students' });
 });
 
 const start = async () => {

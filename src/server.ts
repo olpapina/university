@@ -11,6 +11,7 @@ import facultyRouter from './routes/facultyRoutes';
 import markRouter from './routes/markRoutes';
 import studentRouter from './routes/studentRoutes';
 import universityRouter from './routes/universityRoutes';
+import homeRouter from './routes/homeRoutes';
 import { engine } from 'express-handlebars';
 import * as path from "path";
 import ErrorHandler from "./middlewares/errorHandler";
@@ -33,23 +34,8 @@ app.use('/api/faculties', facultyRouter);
 app.use('/api/marks', markRouter);
 app.use('/api/students', studentRouter);
 app.use('/api/universities', universityRouter);
+app.use('/', homeRouter);
 app.use(ErrorHandler.errorHandler);
-
-app.get('/home', (req, res) => {
-    res.render('home', { pageTitle: 'Home' });
-});
-
-app.get('/faculties', (req, res) => {
-    res.render('faculties', { pageTitle: 'Faculties' });
-});
-
-app.get('/departments', (req, res) => {
-    res.render('departments', { pageTitle: 'Departments' });
-});
-
-app.get('/students', (req, res) => {
-    res.render('students', { pageTitle: 'Students' });
-});
 
 const start = async () => {
     try {

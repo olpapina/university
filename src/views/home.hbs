@@ -29,51 +29,75 @@
             </div>
         </div>
         <div class="sidebar">
-            <h2 style="margin-left: 100px;">Find particular university </h2>
+            <h2 style="margin-left: 100px;">Find the particular university:</h2>
             <br>
             <form id="form" class="form">
-                <input type="search" style="margin-left: 100px" id="query" name="q" size="25"
+                <input type="search" class="field" style="margin-left: 100px" id="query" name="q" size="25"
                     placeholder="Enter the university's title">
-
-                <button type="submit" onclick='./foundUniversity.ts'>Search</button>
+                <button type="submit" onclick="info univer" class="button">Search</button>
+            </form>
+            <div id="info univer">
                 <h3 class="count_data" style="margin-left: 15px;">{{title}}</h3>
                 <h3 class="count_data" style="margin-left: 15px;">{{address}}</h3>
-            </form>
+                <h3 class="count_data" style="margin-left: 15px;">{{faculties}}</h3>
+                <h3 class="count_data" style="margin-left: 15px;">{{message}}</h3>
+            </div>
         </div>
-    </div>
 
-    <style>
-        .container {
-            display: flex;
-        }
+        <style>
+            .container {
+                display: flex;
+            }
 
-        .main-content {
-            flex: 1;
-        }
+            .main-content {
+                flex: 1;
+            }
 
-        .sidebar {
-            width: 500px;
-            border: 1px solid rgb(124, 39, 39);
-            padding: 0 20px;
-        }
+            .sidebar {
+                width: 700px;
+                border: 5px solid rgb(124, 39, 39);
+                padding: 10px 20px;
+                margin: 10px;
+            }
 
-        .form {
-            width: 500px;
-            border: 0px solid rgb(29, 62, 47);
-            padding: 0 20px;
-        }
+            .form {
+                width: 500px;
+                border: 0 solid rgb(29, 62, 47);
+                padding: 10px 20px;
+            }
 
-        .wrapper {
-            display: flex;
-        }
+            .wrapper {
+                display: flex;
+            }
 
-        .block {
-            display: inline-block;
-            border: 1px solid;
-            margin: 2px;
-        }
-    </style>
-    </form>
+            .block {
+                display: inline-block;
+                border: 1px solid;
+                margin: 2px;
+            }
+
+            .button {
+                background-color: #571911;
+                border: 2px;
+                border-radius: 8px;
+                color: white;
+                padding: 12px 24px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+            }
+
+            .field {
+                width: 50%;
+                padding: 12px 12px;
+                margin: 8px 0;
+                box-sizing: border-box;
+                border-radius: 8px;
+                border-color: #d05140 ;
+            }
+        </style>
+        </form>
 </body>
 
 </html>

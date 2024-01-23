@@ -5,15 +5,11 @@ const router = express.Router();
 
 router.get('/home', HomeController.getInfoHomePage);
 
-router.get('/home?q=:title', HomeController.getUniversityByName);
+router.get('/home?q=:title', HomeController.getInfoHomePage);
 
-router.get('/faculties', (req, res) => {
-    res.render('faculties', { pageTitle: 'Faculties' });
-});
+router.get('/faculties', HomeController.getInfoFacultiesPage);
 
-router.get('/departments', (req, res) => {
-    res.render('departments', { pageTitle: 'Departments' });
-});
+router.get('/departments', HomeController.getInfoDepertmentPage);
 
 router.get('/students', (req, res) => {
     res.render('students', { pageTitle: 'Students' });

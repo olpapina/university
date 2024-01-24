@@ -15,16 +15,39 @@ import homeRouter from './routes/homeRoutes';
 import { engine } from 'express-handlebars';
 import * as path from "path";
 import ErrorHandler from "./middlewares/errorHandler";
+import swaggerjsdoc from 'swagger-jsdoc';
+import swaggerui from 'swagger-ui-express'
 
 const logger = log4js.getLogger("file");
 dotenv.config();
 const app = express();
+
+const options = {
+    swaggerDefinition: {
+      info: {
+        title: 'API - Universities',
+        version: '1.0.0',
+        description: 'API documentation'
+      },
+      openapi: "3.0.0",
+      servers: [
+                    {
+                        url: "http://localhost:3000/"
+                    }
+                ]
+    },
+    apis: ['src/routes/*.ts'],
+  };
+  
+const specs = swaggerjsdoc(options);
 app.engine('.hbs', engine({ extname: '.hbs' }));
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, './views'));
 app.enable('view cache');
 app.use(express.json());
 app.use(bodyParser.json());
+
+app.use('/api-docs/', swaggerui.serve, swaggerui.setup(specs));
 
 app.use('/api/courses', courseRouter);
 app.use('/api/lecturers', lecturerRouter);

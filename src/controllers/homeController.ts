@@ -67,6 +67,44 @@ class HomeController {
             }
         }
     }
+
+    async getInfoStudentPage(req: Request, res: Response, next: NextFunction) {
+        const studentName = req.query.name as string;
+        const studentLastName = req.query.lastname as string;
+        try {
+            let studentLastNames: string[] = [];
+            const students = await Student.find();
+            if (students) {
+                students.forEach(item => studentLastNames.push(item.lastName));
+            }
+            if (studentName == undefined && studentLastName == undefined) {
+                res.render('students', { pageTitle: 'Students', studentQuantity: students.length, lastNames: studentLastNames });
+            } else {
+                const student = await Student.findOne({ firstName: studentName, lastName: studentLastName })
+                    .populate('marks');
+                if (student) {
+                    // @ts-ignore
+                    const studentMarks = student.marks.map(mark => mark.magnitude);
+                    function calculateAverage(array: any) {
+                        var sum = 0;
+                        for (var i = 0; i < array.length; i++) {
+                            sum += array[i];
+                        }
+                        return sum / array.length;
+                    }
+                    const averageMark = calculateAverage(studentMarks);
+                    res.render('students', { pageTitle: 'Students', studentQuantity: students.length, lastNames: studentLastNames, studentName: student.firstName, studentLastName: student.lastName, studentRating: averageMark });
+                } else {
+                    res.render('students', { pageTitle: 'Students', studentQuantity: students.length, lastNames: studentLastNames, message: `Student, ${studentName} ${studentLastName}, is not found` });
+                }
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                logger.error(err.message)
+                return next(err);
+            }
+        }
+    }
 }
 
 export default new HomeController();

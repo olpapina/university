@@ -11,8 +11,6 @@ router.get('/faculties', HomeController.getInfoFacultiesPage);
 
 router.get('/departments', HomeController.getInfoDepertmentPage);
 
-router.get('/students', (req, res) => {
-    res.render('students', { pageTitle: 'Students' });
-});
+router.get('/students', HomeController.getInfoStudentPage);
 
 export default router;

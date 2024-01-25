@@ -29,7 +29,7 @@ const options = {
         version: '1.0.0',
         description: 'API documentation'
       },
-      openapi: "3.0.0",
+      openapi: "3.1.0",
       servers: [
                     {
                         url: "http://localhost:3000/"

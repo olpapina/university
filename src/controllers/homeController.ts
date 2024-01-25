@@ -10,6 +10,7 @@ const logger = log4js.getLogger("file");
 class HomeController {
     async getInfoHomePage(req: Request, res: Response, next: NextFunction) {
         const titleUniver = req.query.q as string;
+        logger.info(titleUniver);
         try {
             const universities = await University.find();
             const faculties = await Faculty.find();
@@ -71,6 +72,7 @@ class HomeController {
     async getInfoStudentPage(req: Request, res: Response, next: NextFunction) {
         const studentName = req.query.name as string;
         const studentLastName = req.query.lastname as string;
+        logger.info(studentName, studentLastName);
         try {
             let studentLastNames: string[] = [];
             const students = await Student.find();
@@ -84,16 +86,21 @@ class HomeController {
                     .populate('marks');
                 if (student) {
                     // @ts-ignore
-                    const studentMarks = student.marks.map(mark => mark.magnitude);
-                    function calculateAverage(array: any) {
-                        var sum = 0;
-                        for (var i = 0; i < array.length; i++) {
-                            sum += array[i];
+                    const studentMarks = student.marks.map(mark => parseInt(mark.magnitude));
+                    logger.info(studentMarks)
+                    if (studentMarks.length == 0) {
+                        res.render('students', { pageTitle: 'Students', studentQuantity: students.length, lastNames: studentLastNames, studentName: student.firstName, studentLastName: student.lastName, message1: "Student hasn't had any marks yet!" });
+                    } else {
+                        function calculateAverage(array: number[]) {
+                            var sum = 0;
+                            for (var i = 0; i < array.length; i++) {
+                                sum += array[i];
+                            }
+                            return sum / array.length;
                         }
-                        return sum / array.length;
+                        const averageMark = calculateAverage(studentMarks);
+                        res.render('students', { pageTitle: 'Students', studentQuantity: students.length, lastNames: studentLastNames, studentName: student.firstName, studentLastName: student.lastName, studentRating: averageMark });
                     }
-                    const averageMark = calculateAverage(studentMarks);
-                    res.render('students', { pageTitle: 'Students', studentQuantity: students.length, lastNames: studentLastNames, studentName: student.firstName, studentLastName: student.lastName, studentRating: averageMark });
                 } else {
                     res.render('students', { pageTitle: 'Students', studentQuantity: students.length, lastNames: studentLastNames, message: `Student, ${studentName} ${studentLastName}, is not found` });
                 }

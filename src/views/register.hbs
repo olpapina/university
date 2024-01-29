@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Registration</title>
+</head>
+
+<body>
+    <form form action="#" method="POST">
+        <div class="container">
+            <h1 style="margin-left: 100px">Registration</h1>
+            <p style="margin-left: 30px">Please fill in this form to create an account.</p>
+            <hr>
+
+            <label for="email" style="margin-left: 40px"><b>Username</b></label>
+            <input type="text" placeholder="Enter username or email" name="usermane" id="username" required
+                style="margin-left: 75px" class="field">
+            <br>
+            <label for="psw" style="margin-left: 40px"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" id="psw" required style="margin-left: 75px"
+                class="field">
+            <br>
+            <label for="psw-repeat" style="margin-left: 30px" class="field"><b>Repeat Password</b></label>
+            <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required
+                style="margin-left: 2px" class="field">
+            <br>
+
+            <hr>
+
+            <p style="margin-left: 30px">By creating an account you agree to our <a href="#">Terms and Privacy</a>.</p>
+            <button type="submit" class="registerbtn button" style="margin-left: 30px">Register</button>
+        </div>
+
+        <div class="container signin">
+            <p style="margin-left: 30px">Already have an account? <a href="login">Sign in</a>.</p>
+
+        </div>
+        <br>
+    </form>
+</body>
+
+<style>
+    .button {
+        background-color: #571911;
+        border: 2px;
+        border-radius: 8px;
+        color: white;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+    }
+
+    .field {
+        width: 30%;
+        padding: 12px 12px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border-radius: 8px;
+        border-color: #d05140;
+    }
+</style>
+
+</html>

@@ -17,6 +17,8 @@ import * as path from "path";
 import ErrorHandler from "./middlewares/errorHandler";
 import swaggerjsdoc from 'swagger-jsdoc';
 import swaggerui from 'swagger-ui-express'
+import passport from 'passport'
+import session from 'express-session'
 
 const logger = log4js.getLogger("file");
 dotenv.config();
@@ -59,6 +61,10 @@ app.use('/api/students', studentRouter);
 app.use('/api/universities', universityRouter);
 app.use('/', homeRouter);
 app.use(ErrorHandler.errorHandler);
+app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+process.setMaxListeners(0);
 
 const start = async () => {
     try {

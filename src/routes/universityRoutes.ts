@@ -8,7 +8,7 @@
  *              - title
  *              - address
  *          properties:
- *              id:
+ *              _id:
  *                  type: string
  *                  description: the auto-generated id of the university
  *              title:

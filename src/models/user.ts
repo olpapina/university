@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import passportLocalMongoose from 'passport-local-mongoose'
+import bcrypt from 'bcrypt';
 
 interface IUser {
     username: string;
@@ -23,7 +24,15 @@ const userSchema = new Schema<IUser>({
         default: "user"
     }
 });
-userSchema.plugin(passportLocalMongoose);
+const saltRounds = 8;
+userSchema?.pre('save', async function (next) {
+    const user= this;
+    if (user.isModified('password')) {
+      user.password = await bcrypt.hash(user.password, saltRounds);
+    }
+    next();
+   });
 const User = mongoose.model<IUser>('User', userSchema);
+userSchema.plugin(passportLocalMongoose);
 
 export default User;

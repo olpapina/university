@@ -12,6 +12,7 @@ import markRouter from './routes/markRoutes';
 import studentRouter from './routes/studentRoutes';
 import universityRouter from './routes/universityRoutes';
 import homeRouter from './routes/homeRoutes';
+import userRouter from './routes/userRoutes'
 import { engine } from 'express-handlebars';
 import * as path from "path";
 import ErrorHandler from "./middlewares/errorHandler";
@@ -34,7 +35,7 @@ const options = {
       openapi: "3.1.0",
       servers: [
                     {
-                        url: "http://localhost:3000/"
+                        url: "http://localhost:3000"
                     }
                 ]
     },
@@ -59,12 +60,14 @@ app.use('/api/faculties', facultyRouter);
 app.use('/api/marks', markRouter);
 app.use('/api/students', studentRouter);
 app.use('/api/universities', universityRouter);
+app.use('/api/users', userRouter)
 app.use('/', homeRouter);
 app.use(ErrorHandler.errorHandler);
+process.setMaxListeners(0);
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-process.setMaxListeners(0);
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const start = async () => {
     try {

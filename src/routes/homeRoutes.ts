@@ -14,18 +14,16 @@ router.get('/departments',PagesController.getInfoDepertmentPage);
 
 router.get('/students', PagesController.getInfoStudentPage);
 
-router.get("/", HomeController.showHomePage);
+router.get('/', HomeController.showHomePage);
 
-router.get("/register", HomeController.showRegisterUser);
+router.get('/register', HomeController.showRegisterUser);
 
-router.post("/register", HomeController.registerUser);
+router.post('/register', HomeController.registerUser);
 
 router.get('/login', HomeController.showLoginForm);
 
-router.post('./login', HomeController.loginApp)
+router.post('/login', HomeController.loginApp);
 
 router.get('./logout', HomeController.logoutApp);
-
-router.get("/users", HomeController.registerUser);
 
 export default router;

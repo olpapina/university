@@ -1,0 +1,87 @@
+<DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Login</title>
+    </head>
+
+    <body>
+        <div class="imgcontainer">
+            <img src="https://cdn4.vectorstock.com/i/1000x1000/69/38/personal-account-private-protection-or-locked-vector-22996938.jpg"
+                width="50" height="50" style="margin-left: 100px" alt="Avatar" class="avatar">
+        </div>
+
+        <div class="container" style="margin-left: 70px">
+            <form id="login-form">
+                <label for="username"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" required class="field">
+                <br>
+
+                <label for="password"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required class="field">
+                <br>
+
+                <button id="submit" type="submit" class="button">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </form>
+        </div>
+        <br>
+        <br>
+
+        <div class="login" style="background-color:#f1f1f1">
+            <span class="link" style="font-size: 16px; margin-left: 70px">Would you like register an account <a
+                    href="register">Registration</a></span>
+            <br>
+            <span class="psw" style="margin-left: 150px"><a href="#"> Forgot password?</a></span>
+        </div>
+
+        <script>
+            const form = document.getElementById("login-form");
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const data = new FormData(e.target);
+                const body = JSON.stringify(Object.fromEntries(data));
+
+                fetch('http://localhost:3000/login', {
+                    method: "POST",
+                    body,
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                }).then((res) => res.json())
+            .then((data) => {
+                window.location.replace(`http://localhost:3000${data.redirectUrl}`);
+            });
+            });
+        </script>
+
+        <style>
+            .button {
+                background-color: #571911;
+                border: 2px;
+                border-radius: 8px;
+                color: #fbfaf9;
+                padding: 12px 24px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 12px;
+            }
+
+            .field {
+                width: 30%;
+                padding: 12px 12px;
+                margin: 8px 0;
+                box-sizing: border-box;
+                border-radius: 8px;
+                border-color: #d05140;
+            }
+        </style>
+
+    </body>
+
+    </html>

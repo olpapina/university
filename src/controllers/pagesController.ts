@@ -112,6 +112,10 @@ class PagesController {
             }
         }
     }
+
+    async showHomePage(req: Request, res: Response) {
+        res.render("home", { pageTitle: "Home" });
+    }
 }
 
 export default new PagesController();

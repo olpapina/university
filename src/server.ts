@@ -17,9 +17,12 @@ import { engine } from 'express-handlebars';
 import * as path from "path";
 import ErrorHandler from "./middlewares/errorHandler";
 import swaggerjsdoc from 'swagger-jsdoc';
-import swaggerui from 'swagger-ui-express'
-import passport from 'passport'
-import session from 'express-session'
+import swaggerui from 'swagger-ui-express';
+import passport from 'passport';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import pageRouter from './routes/pageRoutes';
+import { auth } from './middlewares/verifyToken'
 
 const logger = log4js.getLogger("file");
 dotenv.config();
@@ -61,13 +64,15 @@ app.use('/api/marks', markRouter);
 app.use('/api/students', studentRouter);
 app.use('/api/universities', universityRouter);
 app.use('/api/users', userRouter)
-app.use('/', homeRouter);
+app.use('/', auth, pageRouter);
+app.use('/auth', homeRouter);
 app.use(ErrorHandler.errorHandler);
 process.setMaxListeners(0);
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const start = async () => {
     try {

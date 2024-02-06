@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import log4js from '../middlewares/log4js';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
+import { SECRET_KEY } from '../middlewares/verifyToken';
+import jwt from 'jsonwebtoken';
 
 const logger = log4js.getLogger("file");
 
@@ -31,7 +33,7 @@ class HomeController {
 
     async isLoggedIn(req: Request, res: Response, next: NextFunction) {
         if (req.isAuthenticated()) return next();
-        res.redirect("/login");
+        res.redirect("/auth/login");
     }
 
     async loginApp(req: Request, res: Response, next: NextFunction) {
@@ -44,15 +46,17 @@ class HomeController {
 
                 if (isMatch) {
                     logger.info(`Password is approved`);
+                    const accessToken = this.generateAccessToken(user.id, user.username, user.role);
+                    res.cookie("accessToken", accessToken, { maxAge: 900000, httpOnly: true, });
                     res.send({ redirectUrl: '/' })
                     return user;
                 } else {
                     logger.error(`password doesn't match`);
-                    res.send({ redirectUrl: '/login' })
+                    res.send({ redirectUrl: '/auth/login' })
                 }
             } else {
                 logger.info("User doesn't exist");
-                res.send({ redirectUrl: '/login' })
+                res.send({ redirectUrl: '/auth/login' })
             }
         } catch (error) {
             if (error instanceof Error) {
@@ -61,14 +65,13 @@ class HomeController {
             }
         }
     }
+    async generateAccessToken(id:string, username:string, role:string){
+        const user = {id, username, role};
+        return jwt.sign({user}, SECRET_KEY);
+      };
 
     async logoutApp(req: Request, res: Response, next: NextFunction) {
-        logger.info("I'm redirect");
-        res.redirect("/login");
-    }
-
-    async showHomePage(req: Request, res: Response) {
-        res.render("home", { pageTitle: "Home" });
+        res.render("logout", { pageTitle: "Logout" });
     }
 
     async showRegisterUser(req: Request, res: Response, next: NextFunction) {

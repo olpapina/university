@@ -52,7 +52,7 @@
             const data = new FormData(e.target);
             const body = JSON.stringify(Object.fromEntries(data));
 
-            fetch('http://localhost:3000/register', {
+            fetch('http://localhost:3000/auth/register', {
                 method: "POST",
                 body,
                 headers: {

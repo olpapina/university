@@ -46,7 +46,7 @@
                 const data = new FormData(e.target);
                 const body = JSON.stringify(Object.fromEntries(data));
 
-                fetch('http://localhost:3000/login', {
+                fetch('http://localhost:3000/auth/login', {
                     method: "POST",
                     body,
                     headers: {

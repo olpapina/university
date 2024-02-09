@@ -2,114 +2,114 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>Departments</title>
+  <meta charset="utf-8">
+  <title>Departments</title>
 </head>
 
 <body>
 
-    <body>
-        <div class="container">
-            <div class="main-content">
-                <h2 style="margin-left: 30px;">The tab prodives information about all students:</h2>
-                <br>
-                <div class="wrapper">
-                    <h3 class="text-center" style="margin-left: 50px;">Students quantity - </h3>
-                    <h3 class="count_data" style="margin-left: 15px;">{{studentQuantity}}</h3>
-                    <div class="last-names" style="display:none">{{lastNames}}</div>
-                    <div id="string-display" style="margin-left: 50px;">
-                    </div>
+  <body>
+    <div class="container">
+      <div class="main-content">
+        <h2 style="margin-left: 30px;">The tab prodives information about all students:</h2>
+        <br>
+        <div class="wrapper">
+          <h3 class="text-center" style="margin-left: 50px;">Students quantity - </h3>
+          <h3 class="count_data" style="margin-left: 15px;">{{studentQuantity}}</h3>
+          <div class="last-names" style="display:none">{{lastNames}}</div>
+          <div id="string-display" style="margin-left: 50px;">
+          </div>
 
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                            let element = document.querySelector('.last-names');
-                            let text = element.textContent;
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              let element = document.querySelector('.last-names');
+              let text = element.textContent;
 
-                            let arrayNames = text.split(',');
-                            let displayElement = document.getElementById('string-display');
-                            arrayNames.forEach(function (str) {
-                                let paragraph = document.createElement('h3');
-                                paragraph.textContent = str;
-                                displayElement.appendChild(paragraph);
-                            });
-                        });
-                    </script>
+              let arrayNames = text.split(',');
+              let displayElement = document.getElementById('string-display');
+              arrayNames.forEach(function (str) {
+                let paragraph = document.createElement('h3');
+                paragraph.textContent = str;
+                displayElement.appendChild(paragraph);
+              });
+            });
+          </script>
 
-                </div>
-            </div>
-            <div class="sidebar">
-                <h2 style="margin-left: 100px;">Check the progress in the educational process of student you are
-                    interested in:</h2>
-                <br>
-                <form id="form" class="form">
-                    <input type="search" class="field" style="margin-left: 100px" id="query1" name="name" size="25"
-                        placeholder="Enter the firstname of student">
-                    <input type="search" class="field" style="margin-left: 100px" id="query2" name="lastname" size="25"
-                        placeholder="Enter the lastname of student">
-                    <button type="submit" onclick="info univer" class="button">Rating</button>
-                </form>
-                <div id="info univer">
-                    <h3 class="count_data" style="margin-left: 15px;">{{studentName}}</h3>
-                    <h3 class="count_data" style="margin-left: 15px;">{{studentLastName}}</h3>
-                    <h3 class="count_data" style="margin-left: 15px;">{{studentRating}}</h3>
-                    <h3 class="count_data" style="margin-left: 15px;">{{message1}}</h3>
-                    <h3 class="count_data" style="margin-left: 15px;">{{message}}</h3>
-                </div>
-            </div>
+        </div>
+      </div>
+      <div class="sidebar">
+        <h2 style="margin-left: 100px;">Check the progress in the educational process of student you are
+          interested in:</h2>
+        <br>
+        <form id="form" class="form">
+          <input type="search" class="field" style="margin-left: 100px" id="query1" name="name" size="25"
+            placeholder="Enter the firstname of student">
+          <input type="search" class="field" style="margin-left: 100px" id="query2" name="lastname" size="25"
+            placeholder="Enter the lastname of student">
+          <button type="submit" onclick="info univer" class="button">Rating</button>
+        </form>
+        <div id="info univer">
+          <h3 class="count_data" style="margin-left: 15px;">{{studentName}}</h3>
+          <h3 class="count_data" style="margin-left: 15px;">{{studentLastName}}</h3>
+          <h3 class="count_data" style="margin-left: 15px;">{{studentRating}}</h3>
+          <h3 class="count_data" style="margin-left: 15px;">{{message1}}</h3>
+          <h3 class="count_data" style="margin-left: 15px;">{{message}}</h3>
+        </div>
+      </div>
 
-            <style>
-                .container {
-                    display: flex;
-                }
+      <style>
+        .container {
+          display: flex;
+        }
 
-                .main-content {
-                    flex: 1;
-                }
+        .main-content {
+          flex: 1;
+        }
 
-                .sidebar {
-                    width: 700px;
-                    border: 5px solid rgb(124, 39, 39);
-                    padding: 10px 20px;
-                    margin: 10px;
-                }
+        .sidebar {
+          width: 700px;
+          border: 5px solid rgb(124, 39, 39);
+          padding: 10px 20px;
+          margin: 10px;
+        }
 
-                .form {
-                    width: 500px;
-                    border: 0 solid rgb(29, 62, 47);
-                    padding: 10px 20px;
-                }
+        .form {
+          width: 500px;
+          border: 0 solid rgb(29, 62, 47);
+          padding: 10px 20px;
+        }
 
-                .wrapper {
-                    display: flex;
-                }
+        .wrapper {
+          display: flex;
+        }
 
-                .block {
-                    display: inline-block;
-                    border: 1px solid;
-                    margin: 2px;
-                }
+        .block {
+          display: inline-block;
+          border: 1px solid;
+          margin: 2px;
+        }
 
-                .button {
-                    background-color: #571911;
-                    border: 2px;
-                    border-radius: 8px;
-                    color: white;
-                    padding: 12px 24px;
-                    text-align: center;
-                    text-decoration: none;
-                    display: inline-block;
-                    font-size: 16px;
-                }
+        .button {
+          background-color: #571911;
+          border: 2px;
+          border-radius: 8px;
+          color: white;
+          padding: 12px 24px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+        }
 
-                .field {
-                    width: 50%;
-                    padding: 12px 12px;
-                    margin: 8px 0;
-                    box-sizing: border-box;
-                    border-radius: 8px;
-                    border-color: #d05140;
-                }
-            </style>
-    </body>
+        .field {
+          width: 50%;
+          padding: 12px 12px;
+          margin: 8px 0;
+          box-sizing: border-box;
+          border-radius: 8px;
+          border-color: #d05140;
+        }
+      </style>
+  </body>
 
 </html>

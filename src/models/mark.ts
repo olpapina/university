@@ -6,14 +6,14 @@ interface IMark {
 }
 
 const markSchema = new Schema<IMark>({
-    title: {
-        type: String,
-        required: true
-    },
-    magnitude: {
-        type: Number,
-        required: true
-    }
+  title: {
+    type: String,
+    required: true
+  },
+  magnitude: {
+    type: Number,
+    required: true
+  }
 });
 
 const Mark = mongoose.model<IMark>('Mark', markSchema);

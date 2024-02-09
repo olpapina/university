@@ -68,6 +68,10 @@
  *      responses:
  *          '201':
  *              description: Successfully created a new student
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Students'
  *          '400':
  *              description: Invalid input
  */
@@ -95,11 +99,10 @@
  *      responses:
  *          '200':
  *              description: Successfully updated
- *          content:
+ *              content:
  *                  application/json:
  *                      schema:
- *                          type:
- *                              $ref: '#/components/schemas/Students'
+ *                          $ref: '#/components/schemas/Students'
  *          '404':
  *              description: Student ID is not found
  *          '500':
@@ -122,11 +125,10 @@
  *      responses:
  *          '200':
  *              description: Success
- *          content:
+ *              content:
  *                  application/json:
  *                      schema:
- *                          type:
- *                              $ref: '#/components/schemas/Students'
+ *                          $ref: '#/components/schemas/Students'
  *          '404':
  *              description: Student ID is not found
  *          '500':
@@ -181,12 +183,17 @@
  *          description: The specific mark of some subject
  *      responses:
  *          '200':
- *              description: Student of particular course and particulars marks
+ *              description: Students of particular course and particulars marks
  *              content:
  *                  application/json:
  *                      schema:
- *                          type:
- *                             $ref: '#/components/schemas/Students'
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Students'
+ *          '404':
+ *              description: Students ID is not found
+ *          '500':
+ *              description: Internal server error
  */
 
 import express from 'express';

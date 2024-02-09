@@ -2,14 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import log4js from '../middlewares/log4js';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
-import { SECRET_KEY } from '../middlewares/verifyToken';
 import jwt from 'jsonwebtoken';
 
 const logger = log4js.getLogger("file");
 
 class HomeController {
 
-    async registerUser(req: Request, res: Response, next: NextFunction) {
+    async registerUser(req: Request, res: Response) {
         const username = req.body.usrname;
         const password = req.body.psw;
         logger.info(username, password);
@@ -23,7 +22,7 @@ class HomeController {
             const user = await newUser.save()
             if (user) {
                 logger.info(`Sucseccfully created ${user}`);
-                res.send({ redirectUrl: '/' })
+                res.send({ redirectUrl: '/auth/login' })
             }
 
         } catch (error) {
@@ -31,27 +30,22 @@ class HomeController {
         }
     }
 
-    async isLoggedIn(req: Request, res: Response, next: NextFunction) {
-        if (req.isAuthenticated()) return next();
-        res.redirect("/auth/login");
-    }
-
     async loginApp(req: Request, res: Response, next: NextFunction) {
+        const SECRET_KEY = process.env.SECRET_KEY || "";
         logger.info(req.body.username, req.body.password);
         try {
             const user = await User.findOne({ username: req.body.username });
             if (user) {
                 logger.info(`Sucseccfully found ${user}`);
                 const isMatch = bcrypt.compareSync(req.body.password, user.password);
-
                 if (isMatch) {
                     logger.info(`Password is approved`);
-                    const accessToken = this.generateAccessToken(user.id, user.username, user.role);
-                    res.cookie("accessToken", accessToken, { maxAge: 900000, httpOnly: true, });
-                    res.send({ redirectUrl: '/' })
-                    return user;
+                    const token = jwt.sign({ _id: user._id?.toString(), username: user.username, role: user.role }, SECRET_KEY, {expiresIn:'400m'});
+                    res.cookie('universityCookie', token, { maxAge: 900000, httpOnly: true });
+                    logger.info(`${token}`);
+                    res.send({ redirectUrl: '/' });
                 } else {
-                    logger.error(`password doesn't match`);
+                    logger.error(`Password doesn't match`);
                     res.send({ redirectUrl: '/auth/login' })
                 }
             } else {
@@ -65,20 +59,17 @@ class HomeController {
             }
         }
     }
-    async generateAccessToken(id:string, username:string, role:string){
-        const user = {id, username, role};
-        return jwt.sign({user}, SECRET_KEY);
-      };
 
-    async logoutApp(req: Request, res: Response, next: NextFunction) {
+    async logoutApp(req: Request, res: Response) {
+        res.clearCookie("universityCookie");
         res.render("logout", { pageTitle: "Logout" });
     }
 
-    async showRegisterUser(req: Request, res: Response, next: NextFunction) {
+    async showRegisterUser(req: Request, res: Response) {
         res.render("register", { pageTitle: "Registration" });
     }
 
-    async showLoginForm(req: Request, res: Response, next: NextFunction) {
+    async showLoginForm(req: Request, res: Response) {
         res.render("login", { pageTitle: "Login" });
     }
 }

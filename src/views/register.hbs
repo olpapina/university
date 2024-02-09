@@ -8,7 +8,7 @@
 
 <body>
   <div class="container">
-    <form id="register-form">
+    <form id="register-form" action="/auth/register" method="post">
       <h1 style="margin-left: 100px">Registration</h1>
       <p style="margin-left: 30px">Please fill in this form to create an account.</p>
       <hr>
@@ -44,27 +44,6 @@
     <p id="number" class="invalid">A <b>number</b></p>
     <p id="length" class="invalid">Minimum <b>8 characters</b></p>
   </div>
-  <script>
-    const form = document.getElementById("register-form");
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const data = new FormData(e.target);
-      const body = JSON.stringify(Object.fromEntries(data));
-
-      fetch('http://localhost:3000/auth/register', {
-        method: "POST",
-        body,
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-      }).then((res) => res.json())
-        .then((data) => {
-          window.location.replace(`http://localhost:3000${data.redirectUrl}`);
-        });
-    });
-  </script>
-</body>
 
 <style>
   .button {

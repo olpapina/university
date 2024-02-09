@@ -22,7 +22,7 @@ class HomeController {
             const user = await newUser.save()
             if (user) {
                 logger.info(`Sucseccfully created ${user}`);
-                res.send({ redirectUrl: '/auth/login' })
+                res.redirect('/auth/login');
             }
 
         } catch (error) {
@@ -40,17 +40,17 @@ class HomeController {
                 const isMatch = bcrypt.compareSync(req.body.password, user.password);
                 if (isMatch) {
                     logger.info(`Password is approved`);
-                    const token = jwt.sign({ _id: user._id?.toString(), username: user.username, role: user.role }, SECRET_KEY, {expiresIn:'400m'});
+                    const token = jwt.sign({ _id: user._id?.toString(), username: user.username, role: user.role }, SECRET_KEY, { expiresIn: '400m' });
                     res.cookie('universityCookie', token, { maxAge: 900000, httpOnly: true });
                     logger.info(`${token}`);
-                    res.send({ redirectUrl: '/' });
+                    res.redirect('/');
                 } else {
                     logger.error(`Password doesn't match`);
-                    res.send({ redirectUrl: '/auth/login' })
+                    res.redirect('/auth/login');
                 }
             } else {
                 logger.info("User doesn't exist");
-                res.send({ redirectUrl: '/auth/login' })
+                res.redirect('/auth/login');
             }
         } catch (error) {
             if (error instanceof Error) {

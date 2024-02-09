@@ -18,7 +18,6 @@ import * as path from "path";
 import ErrorHandler from "./middlewares/errorHandler";
 import swaggerjsdoc from 'swagger-jsdoc';
 import swaggerui from 'swagger-ui-express';
-import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import pageRouter from './routes/pageRoutes';
 
@@ -50,6 +49,8 @@ app.set("views", path.join(__dirname, './views'));
 app.enable('view cache');
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use('/api-docs/', swaggerui.serve, swaggerui.setup(specs));
 
@@ -66,9 +67,6 @@ app.use('/', pageRouter);
 app.use('/auth', homeRouter);
 app.use(ErrorHandler.errorHandler);
 process.setMaxListeners(0);
-// app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 const start = async () => {
   try {

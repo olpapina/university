@@ -46,11 +46,11 @@ class HomeController {
                     res.redirect('/');
                 } else {
                     logger.error(`Password doesn't match`);
-                    res.redirect('/auth/login');
+                    res.render("login", { errorMessage: "Password doesn't match"});
                 }
             } else {
                 logger.info("User doesn't exist");
-                res.redirect('/auth/login');
+                res.render("login", { errorMessage: "User doesn't exist. Check the username or register."});
             }
         } catch (error) {
             if (error instanceof Error) {

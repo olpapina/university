@@ -114,7 +114,6 @@ class PagesController {
   }
 
   async showHomePage(req: Request, res: Response) {
-    console.log("hello")
     res.render("home", { pageTitle: "Home" });
   }
 }

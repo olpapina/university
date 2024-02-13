@@ -20,6 +20,7 @@ import swaggerjsdoc from 'swagger-jsdoc';
 import swaggerui from 'swagger-ui-express';
 import cookieParser from 'cookie-parser';
 import pageRouter from './routes/pageRoutes';
+import session from 'express-session';
 
 const logger = log4js.getLogger("file");
 dotenv.config();
@@ -51,6 +52,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(session( { secret: 'secret', saveUninitialized: true, resave: true} ))
 
 app.use('/api-docs/', swaggerui.serve, swaggerui.setup(specs));
 
@@ -72,7 +74,7 @@ const start = async () => {
   try {
     if (process.env.DB_CONN_STRING) {
       await mongoose
-      .connect(process.env.DB_CONN_STRING), { useNewUrsParser: true, useUnifiedTopology: true };
+        .connect(process.env.DB_CONN_STRING), { useNewUrsParser: true, useUnifiedTopology: true };
       logger.info('Connected to MongoDB');
       app.listen(process.env.PORT, () => {
         logger.info(`Listerning port ${process.env.PORT}`);

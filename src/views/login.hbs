@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8">
     <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
   </head>
 
   <body>
@@ -18,12 +19,14 @@
         <label for="username"><b>Username</b></label>
         <input type="text" placeholder="Enter Username" name="username" required class="field">
         <br>
-
-        <label for="password"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" 
-        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-        require style="margin-left: 2px" class="field">
+        <div class="password-container">
+          <label for="password"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="password" id="password"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+            title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+            require style="margin-left: 2px" class="field">
+          <i class="fa-solid fa-eye" id="eye"></i>
+        </div>
         <br>
 
         <button id="submit" type="submit" class="button">Login</button>
@@ -42,6 +45,16 @@
       <br>
       <span class="psw" style="margin-left: 150px"><a href="#"> Forgot password?</a></span>
     </div>
+
+    <script>
+      const passwordInput = document.querySelector("#password");
+      const eye = document.querySelector("#eye");
+      eye.addEventListener("click", function () {
+        this.classList.toggle("fa-eye-slash");
+        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+        passwordInput.setAttribute("type", type);
+      })
+    </script>
 
     <style>
       .button {
@@ -63,6 +76,19 @@
         box-sizing: border-box;
         border-radius: 8px;
         border-color: #d05140;
+      }
+
+      .password-container {
+        width: 100%;
+        position: relative;
+      }
+
+      .fa-eye {
+        position: absolute;
+        top: 40%;
+        right: 65%;
+        cursor: pointer;
+        color: lightgray;
       }
     </style>
 

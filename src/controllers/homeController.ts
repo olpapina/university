@@ -8,7 +8,7 @@ const logger = log4js.getLogger("file");
 
 class HomeController {
 
-    async registerUser(req: Request, res: Response) {
+    async registerUser(req: Request, res: Response, next: NextFunction) {
         const username = req.body.usrname;
         const password = req.body.psw;
         logger.info(username, password);
@@ -26,7 +26,8 @@ class HomeController {
             }
 
         } catch (error) {
-            return res.status(500).json({ error: "An error occurred while creating the user" });
+            logger.error(`${username}'s already existed.`);
+            return res.render("register", { errorMessage: `${username} is already existed. Username must be unique. Please, enter another.` });
         }
     }
 
@@ -46,11 +47,11 @@ class HomeController {
                     res.redirect('/');
                 } else {
                     logger.error(`Password doesn't match`);
-                    res.render("login", { errorMessage: "Password doesn't match"});
+                    res.render("login", { errorMessage: "Password doesn't match" });
                 }
             } else {
                 logger.info("User doesn't exist");
-                res.render("login", { errorMessage: "User doesn't exist. Check the username or register."});
+                res.render("login", { errorMessage: "User doesn't exist. Check the username or register." });
             }
         } catch (error) {
             if (error instanceof Error) {

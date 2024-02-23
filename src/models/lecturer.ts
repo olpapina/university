@@ -10,23 +10,23 @@ interface ILecturer {
 }
 
 const lecturerSchema = new Schema<ILecturer>({
-    firstName: {
-        type: String,
-        required: true
-    },
-    lastName: {
-        type: String,
-        required: true
-    },
-    faculty: {
-        type: Schema.Types.ObjectId,
-        ref: 'Faculty',
-        required: true
-    },
-    courses: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Course'
-    }]
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  faculty: {
+    type: Schema.Types.ObjectId,
+    ref: 'Faculty',
+    required: true
+  },
+  courses: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Course'
+  }]
 });
 
 const Lecturer = mongoose.model<ILecturer>('Lecturer', lecturerSchema);

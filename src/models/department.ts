@@ -6,15 +6,15 @@ interface IDepartment {
 }
 
 const departmentSchema = new Schema<IDepartment>({
-    title: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    courses: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Course'
-    }]
+  title: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  courses: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Course'
+  }]
 });
 
 const Department = mongoose.model<IDepartment>('Department', departmentSchema);

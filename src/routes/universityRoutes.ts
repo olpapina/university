@@ -64,6 +64,10 @@
  *      responses:
  *          '201':
  *              description: Successfully created a new university
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Universities'
  *          '400':
  *              description: Invalid input
  */
@@ -91,11 +95,10 @@
  *      responses:
  *          '200':
  *              description: Successfully updated
- *          content:
+ *              content:
  *                  application/json:
  *                      schema:
- *                          type:
- *                              $ref: '#/components/schemas/Universities'
+ *                          $ref: '#/components/schemas/Universities'
  *          '404':
  *              description: University ID is not found
  *          '500':
@@ -118,11 +121,10 @@
  *      responses:
  *          '200':
  *              description: Success
- *          content:
+ *              content:
  *                  application/json:
  *                      schema:
- *                          type:
- *                              $ref: '#/components/schemas/Universities'
+ *                          $ref: '#/components/schemas/Universities'
  *          '404':
  *              description: University ID is not found
  *          '500':
@@ -148,8 +150,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          type:
- *                              $ref: '#/components/schemas/Universities'
+ *                          $ref: '#/components/schemas/Universities'
  *          '404':
  *              description: University ID is not found
  *          '500':

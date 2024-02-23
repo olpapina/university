@@ -17,31 +17,32 @@ import { engine } from 'express-handlebars';
 import * as path from "path";
 import ErrorHandler from "./middlewares/errorHandler";
 import swaggerjsdoc from 'swagger-jsdoc';
-import swaggerui from 'swagger-ui-express'
-import passport from 'passport'
-import session from 'express-session'
+import swaggerui from 'swagger-ui-express';
+import cookieParser from 'cookie-parser';
+import pageRouter from './routes/pageRoutes';
+import session from 'express-session';
 
 const logger = log4js.getLogger("file");
 dotenv.config();
 const app = express();
 
 const options = {
-    swaggerDefinition: {
-      info: {
-        title: 'API - Universities',
-        version: '1.0.0',
-        description: 'API documentation'
-      },
-      openapi: "3.1.0",
-      servers: [
-                    {
-                        url: "http://localhost:3000"
-                    }
-                ]
+  swaggerDefinition: {
+    info: {
+      title: 'API - Universities',
+      version: '1.0.0',
+      description: 'API documentation'
     },
-    apis: ['src/routes/*.ts'],
-  };
-  
+    openapi: "3.1.0",
+    servers: [
+      {
+        url: "http://localhost:3000"
+      }
+    ]
+  },
+  apis: ['src/routes/*.ts'],
+};
+
 const specs = swaggerjsdoc(options);
 app.engine('.hbs', engine({ extname: '.hbs' }));
 app.set("view engine", ".hbs");
@@ -49,6 +50,9 @@ app.set("views", path.join(__dirname, './views'));
 app.enable('view cache');
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(session( { secret: 'secret', saveUninitialized: true, resave: true} ))
 
 app.use('/api-docs/', swaggerui.serve, swaggerui.setup(specs));
 
@@ -61,27 +65,24 @@ app.use('/api/marks', markRouter);
 app.use('/api/students', studentRouter);
 app.use('/api/universities', universityRouter);
 app.use('/api/users', userRouter)
-app.use('/', homeRouter);
+app.use('/', pageRouter);
+app.use('/auth', homeRouter);
 app.use(ErrorHandler.errorHandler);
 process.setMaxListeners(0);
-app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 const start = async () => {
-    try {
-        if (process.env.DB_CONN_STRING) {
-            await mongoose
-                .connect(process.env.DB_CONN_STRING), { useNewUrsParser: true, useUnifiedTopology: true };
-            logger.info('Connected to MongoDB');
-            app.listen(process.env.PORT, () => {
-                logger.info(`Listerning port ${process.env.PORT}`);
-            });
-        }
-    } catch (error) {
-        logger.error('Connection error - is not connected to the DB');
+  try {
+    if (process.env.DB_CONN_STRING) {
+      await mongoose
+        .connect(process.env.DB_CONN_STRING), { useNewUrsParser: true, useUnifiedTopology: true };
+      logger.info('Connected to MongoDB');
+      app.listen(process.env.PORT, () => {
+        logger.info(`Listerning port ${process.env.PORT}`);
+      });
     }
+  } catch (error) {
+    logger.error('Connection error - is not connected to the DB');
+  }
 }
 
 start();

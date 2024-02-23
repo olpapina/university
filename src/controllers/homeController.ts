@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import log4js from '../middlewares/log4js';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const logger = log4js.getLogger("file");
 
@@ -21,38 +22,36 @@ class HomeController {
             const user = await newUser.save()
             if (user) {
                 logger.info(`Sucseccfully created ${user}`);
-                res.send({ redirectUrl: '/' })
+                res.redirect('/auth/login');
             }
 
         } catch (error) {
-            return res.status(500).json({ error: "An error occurred while creating the user" });
+            logger.error(`${username}'s already existed.`);
+            return res.render("register", { errorMessage: `${username} is already existed. Username must be unique. Please, enter another.` });
         }
     }
 
-    async isLoggedIn(req: Request, res: Response, next: NextFunction) {
-        if (req.isAuthenticated()) return next();
-        res.redirect("/login");
-    }
-
     async loginApp(req: Request, res: Response, next: NextFunction) {
+        const SECRET_KEY = process.env.SECRET_KEY || "";
         logger.info(req.body.username, req.body.password);
         try {
             const user = await User.findOne({ username: req.body.username });
             if (user) {
                 logger.info(`Sucseccfully found ${user}`);
                 const isMatch = bcrypt.compareSync(req.body.password, user.password);
-
                 if (isMatch) {
                     logger.info(`Password is approved`);
-                    res.send({ redirectUrl: '/' })
-                    return user;
+                    const token = jwt.sign({ _id: user._id?.toString(), username: user.username, role: user.role }, SECRET_KEY, { expiresIn: '400m' });
+                    res.cookie('universityCookie', token, { maxAge: 900000, httpOnly: true });
+                    logger.info(`${token}`);
+                    res.redirect('/');
                 } else {
-                    logger.error(`password doesn't match`);
-                    res.send({ redirectUrl: '/login' })
+                    logger.error(`Password doesn't match`);
+                    res.render("login", { errorMessage: "Password doesn't match" });
                 }
             } else {
                 logger.info("User doesn't exist");
-                res.send({ redirectUrl: '/login' })
+                res.render("login", { errorMessage: "User doesn't exist. Check the username or register." });
             }
         } catch (error) {
             if (error instanceof Error) {
@@ -62,20 +61,16 @@ class HomeController {
         }
     }
 
-    async logoutApp(req: Request, res: Response, next: NextFunction) {
-        logger.info("I'm redirect");
-        res.redirect("/login");
+    async logoutApp(req: Request, res: Response) {
+        res.clearCookie("universityCookie");
+        res.render("logout", { pageTitle: "Logout" });
     }
 
-    async showHomePage(req: Request, res: Response) {
-        res.render("home", { pageTitle: "Home" });
-    }
-
-    async showRegisterUser(req: Request, res: Response, next: NextFunction) {
+    async showRegisterUser(req: Request, res: Response) {
         res.render("register", { pageTitle: "Registration" });
     }
 
-    async showLoginForm(req: Request, res: Response, next: NextFunction) {
+    async showLoginForm(req: Request, res: Response) {
         res.render("login", { pageTitle: "Login" });
     }
 }

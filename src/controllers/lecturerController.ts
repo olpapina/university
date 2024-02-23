@@ -7,109 +7,109 @@ const logger = log4js.getLogger("file");
 
 class LecturerController {
 
-    async createLecturer(req: Request, res: Response, next: NextFunction) {
-        const { firstName, lastName, faculty, courses, workTime } = req.body;
+  async createLecturer(req: Request, res: Response, next: NextFunction) {
+    const { firstName, lastName, faculty, courses, workTime } = req.body;
 
-        const newLecturer = new Lecturer({
-            firstName,
-            lastName,
-            faculty,
-            courses,
-            workTime
-        });
+    const newLecturer = new Lecturer({
+      firstName,
+      lastName,
+      faculty,
+      courses,
+      workTime
+    });
 
-        try {
-            const savedLecturer = await newLecturer.save();
-            res
-                .status(201)
-                .json(savedLecturer);
-            logger.info(`Lecturer was successfully added in the DB - ${savedLecturer}`);
-        } catch (err) {
-            if (err instanceof Error) {
-                logger.error(err.message)
-                return next(err);
-            }
-        }
+    try {
+      const savedLecturer = await newLecturer.save();
+      res
+        .status(201)
+        .json(savedLecturer);
+      logger.info(`Lecturer was successfully added in the DB - ${savedLecturer}`);
+    } catch (err) {
+      if (err instanceof Error) {
+        logger.error(err.message)
+        return next(err);
+      }
     }
+  }
 
-    async updateLecturer(req: Request, res: Response, next: NextFunction) {
-        const lecturerId = req.params.id;
-        const { firstName, lastName, faculty, courses, workTime } = req.body;
+  async updateLecturer(req: Request, res: Response, next: NextFunction) {
+    const lecturerId = req.params.id;
+    const { firstName, lastName, faculty, courses, workTime } = req.body;
 
-        try {
-            const updatedLecturer = await Lecturer.findByIdAndUpdate(
-                lecturerId,
-                { firstName, lastName, faculty, courses, workTime },
-                { new: true }
-            );
+    try {
+      const updatedLecturer = await Lecturer.findByIdAndUpdate(
+        lecturerId,
+        { firstName, lastName, faculty, courses, workTime },
+        { new: true }
+      );
 
-            if (updatedLecturer) {
-                res
-                    .status(200)
-                    .json(updatedLecturer);
-                logger.info(`Lecturer was successfully updated in the DB - ${updatedLecturer}`);
-            } else {
-                throw new StatusCodeError(404, 'Lecturer is not found');
-            }
-        } catch (err) {
-            if (err instanceof Error) {
-                logger.error(err.message)
-                return next(err);
-            }
-        }
+      if (updatedLecturer) {
+        res
+          .status(200)
+          .json(updatedLecturer);
+        logger.info(`Lecturer was successfully updated in the DB - ${updatedLecturer}`);
+      } else {
+        throw new StatusCodeError(404, 'Lecturer is not found');
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        logger.error(err.message)
+        return next(err);
+      }
     }
+  }
 
-    async deleteLecturer(req: Request, res: Response, next: NextFunction) {
-        const lecturerId = req.params.id;
+  async deleteLecturer(req: Request, res: Response, next: NextFunction) {
+    const lecturerId = req.params.id;
 
-        try {
-            const deletedLecturer = await Lecturer.findByIdAndDelete(lecturerId);
+    try {
+      const deletedLecturer = await Lecturer.findByIdAndDelete(lecturerId);
 
-            if (deletedLecturer) {
-                res
-                    .json(deletedLecturer);
-                logger.info(`Lecturer was successfully deleted from the DB`);
-            } else {
-                throw new StatusCodeError(404, 'Lecturer is not found');
-            }
-        } catch (err) {
-            if (err instanceof Error) {
-                logger.error(err.message)
-                return next(err);
-            }
-        }
+      if (deletedLecturer) {
+        res
+          .json(deletedLecturer);
+        logger.info(`Lecturer was successfully deleted from the DB`);
+      } else {
+        throw new StatusCodeError(404, 'Lecturer is not found');
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        logger.error(err.message)
+        return next(err);
+      }
     }
+  }
 
-    async getAllLecturers(req: Request, res: Response, next: NextFunction) {
-        try {
-            const lecturers = await Lecturer.find();
-            res
-                .status(200)
-                .json(lecturers);
-        } catch (err) {
-            return next(err);
-        }
+  async getAllLecturers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const lecturers = await Lecturer.find();
+      res
+        .status(200)
+        .json(lecturers);
+    } catch (err) {
+      return next(err);
     }
+  }
 
-    async getLecturerById(req: Request, res: Response, next: NextFunction) {
-        const lecturerId = req.params.id;
+  async getLecturerById(req: Request, res: Response, next: NextFunction) {
+    const lecturerId = req.params.id;
 
-        try {
-            const lecturer = await Lecturer.findById(lecturerId);
-            if (lecturer) {
-                res
-                    .status(200)
-                    .json(lecturer);
-            } else {
-                throw new StatusCodeError(404, 'Lecturer is not found');
-            }
-        } catch (err) {
-            if (err instanceof Error) {
-                logger.error(err.message)
-                return next(err);
-            }
-        }
+    try {
+      const lecturer = await Lecturer.findById(lecturerId);
+      if (lecturer) {
+        res
+          .status(200)
+          .json(lecturer);
+      } else {
+        throw new StatusCodeError(404, 'Lecturer is not found');
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        logger.error(err.message)
+        return next(err);
+      }
     }
+  }
 }
 
 export default new LecturerController();
